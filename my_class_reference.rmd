@@ -33,3 +33,25 @@ setwd("~/Documents/GitHub/data_journalism_2023_spring")
 install.packages("tidyverse")
 library(tidyverse)
 ```
+
+### Abbreviations
+
+obs means rows
+variables means columns
+
+### Assigning values to variable names
+
+Use a left-pointing arrow (assignment operator) to put a value to a variable. Run these in the console.
+
+firstnumber <- 1
+secondnumber <-2
+
+### How to make comments
+
+Put a # in front of a sentence in a codeblock to create a comment that won't run with the block.
+
+```{r}
+# examples
+library(tidyverse)
+```
+
