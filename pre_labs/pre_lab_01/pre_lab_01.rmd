@@ -115,7 +115,7 @@ head(umd_courses)
 ```
 
 In the space below, write the name of the business from the first row of the "name" column. 
-**Answer**
+**Answer: Directed Research**
 
 ### Task 8: Explore data with interactive dataframe
 
@@ -135,7 +135,7 @@ umd_courses %>%
 
 Describe what you think each line of this code is doing below, based on the result:
 
-**Answer**
+**Answer: I'm not sure what the %s are doing, but I think the first line is selecting the dataset to look at, the second line is filtering the data by a specific condition, and the third and fourth lines are telling us how many classes fit into these specific conditions — which, in this case, would be the term they're offered.**
 
 ### Task 10: Adding arrange to sort the data
 
@@ -151,7 +151,7 @@ umd_courses %>%
 ```
 
 Compared to the previous codeblock, what has changed and how did that affect the result? 
-**Answer**
+**Answer: This code arranged the data in descending order by how many classes were offered during each term.**
 
 ### Task 11: Grouping by multiple columns
 
@@ -168,7 +168,7 @@ umd_courses %>%
 
 Compared to the previous codeblock, how did the output change and what in the code changed it?
 
-**Answer**
+**Answer: This codeblock added another condition, the department that data is in, which adjusted the count of classes offered in a specific term and under a specific department.**
 
 ### Task 12: Other summary functions
 
@@ -185,7 +185,7 @@ umd_courses %>%
 ```
 
 Compared to the previous codeblock, what has changed and how did that affect the result? 
-**Answer**
+**Answer: This added another **
 
 ### Task 13: different kinds of summarizations
 
@@ -204,7 +204,7 @@ umd_courses %>%
 ```
 
 Compared to the previous codeblock, what has changed and how did that affect the result? What do the top terms have in common? 
-**Answer**
+**Answer: **
 
 ### Task 14: more aggregations
 
