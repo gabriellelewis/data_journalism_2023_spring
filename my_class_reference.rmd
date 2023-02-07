@@ -1,6 +1,6 @@
 ---
 title: "Class Reference"
-author: "Student name"
+author: "Gabrielle Lewis"
 output:
   html_document:
     theme: cerulean
