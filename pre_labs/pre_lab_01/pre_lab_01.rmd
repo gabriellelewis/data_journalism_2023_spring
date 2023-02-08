@@ -135,7 +135,7 @@ umd_courses %>%
 
 Describe what you think each line of this code is doing below, based on the result:
 
-**Answer: I'm not sure what the %s are doing, but I think the first line is selecting the dataset to look at, the second line is filtering the data by a specific condition, and the third and fourth lines are telling us how many classes fit into these specific conditions — which, in this case, would be the term they're offered.**
+**Answer: The first line is selecting the dataset to look at, the second line is grouping the data by a specific condition, and the third and fourth lines are telling us the number of classes fit under each grouping condition, which is the term they're being offered in this case.**
 
 ### Task 10: Adding arrange to sort the data
 
@@ -151,7 +151,7 @@ umd_courses %>%
 ```
 
 Compared to the previous codeblock, what has changed and how did that affect the result? 
-**Answer: This code arranged the data in descending order by how many classes were offered during each term.**
+**Answer: This code arranged the data in descending order by how many classes were offered during each term. The data was first summarized into the number of classes offered each term, then arranged into descending order.**
 
 ### Task 11: Grouping by multiple columns
 
@@ -168,7 +168,7 @@ umd_courses %>%
 
 Compared to the previous codeblock, how did the output change and what in the code changed it?
 
-**Answer: This codeblock added another condition, the department that data is in, which adjusted the count of classes offered in a specific term and under a specific department.**
+**Answer: This codeblock added another condition to group data — the department that classes are in — which adjusted how the data was grouped. The output now shows the number of classes under each department and specific term.**
 
 ### Task 12: Other summary functions
 
@@ -185,7 +185,7 @@ umd_courses %>%
 ```
 
 Compared to the previous codeblock, what has changed and how did that affect the result? 
-**Answer: This added another **
+**Answer: This took away department as a condition for grouping and instead added another metric to summarize the data: the total number of seats offered. The output shows one column for the total number of classes in a given term and another column for how many seats there are in a given term.**
 
 ### Task 13: different kinds of summarizations
 
@@ -204,7 +204,7 @@ umd_courses %>%
 ```
 
 Compared to the previous codeblock, what has changed and how did that affect the result? What do the top terms have in common? 
-**Answer: **
+**Answer: In addition to the total number of classes and total number of seats for a given semester, the 7th and 8th lines of code add two more metrics, the mean number of seats per term and median number of seats per term, to summarize the data. There are now two more columns, one each for the mean and median number of seats in a given term. The mean number of seats for each term are much larger than the median number of seats.**
 
 ### Task 14: more aggregations
 
@@ -226,7 +226,7 @@ umd_courses %>%
 
 Compared to the previous codeblock, what has changed and how did that affect the result? How is the data sorted?
 
-**Answer**
+**Answer: Two more summarization metrics — the minimum number of seats available and maximum number of seats available — were added to the data output, and the data was also grouped by department rather than term. The data is sorted in descending order, starting from the department with the highest number of seats and decreasing from there.**
 
 ### Task 12: Questions
 
@@ -234,8 +234,8 @@ No code here; I want you to provide three questions that this data suggests to y
 
 **Answer**
 
-1.  
+1.  How many departments have a max number of seats above 1000, and how many departments have a max number of seats below 1000?
 
-2.  
+2.  Which departments have the highest number of professors?
 
-3.  
+3.  Which professors teach the highest number of classes, and which department are they in?

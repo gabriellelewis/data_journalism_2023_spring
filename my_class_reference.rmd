@@ -34,6 +34,13 @@ install.packages("tidyverse")
 library(tidyverse)
 ```
 
+### Codeblock Commands/Functions
+glimpse() = get a sense of the data, some of the values in each field/variable/column, and the data types of each field/variable/column.
+group_by() = group the data by a specific condition
+summarise() = summarize the data with functions contained with the ()
+
+
+
 ### Abbreviations
 
 obs means rows
