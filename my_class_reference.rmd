@@ -34,16 +34,44 @@ install.packages("tidyverse")
 library(tidyverse)
 ```
 
+### Tidyverse Tools
+
+Lubridate -> helps working with date-times and time-spans, can mutate columns into dates that R can interpret, can create new columns from data
+  * functions: mdy, ymd, ymd_hms, floor_date (groups all dates into the first one mentioned of a specific month/year)
+
 ### Codeblock Commands/Functions
-glimpse() = get a sense of the data, some of the values in each field/variable/column, and the data types of each field/variable/column.
-group_by() = group the data by a specific condition
-summarise() = summarize the data with functions contained within the ()
 
+glimpse() -> get a sense of the data, some of the values in each field/variable/column, and the data types of each field/variable/column.
+group_by() -> group the data by a specific condition
+summarise() -> summarize the data with functions contained within the ()
 
-### Abbreviations
+n() -> counts rows of data
+nrow(dataframe name) -> shows # in a certain dataframe
 
+head() -> show first n rows of data
+
+str_detect(column, "term") -> string detect, is this phrase in this column?
+  * "^term" -> does this phrase show up at the START of the column?
+  * "term^" -> does this phrase show up at the END of the column?
+str_to_upper(column name) -> convert a character column into all uppercase, can standardize letter case
+case_when() -> can handle multiple variations, says when the data shows a specific scenario to do a specific action
+  
+mutate(column name=function(column name)) -> can change column type
+
+### Filters vs. Selections
+
+filter(name == "value") is for ROWS; create a new variable to hold the subset you're picking out
+select() is for COLUMNS
+
+### Abbreviations/Meanings
+
+%>% and then do this
 obs means rows
 variables means columns
+== exact matching
+!= does not match
+AND is `&` and OR is `|`
+> or >=, < or <=
 
 ### Assigning values to variable names
 
