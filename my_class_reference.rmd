@@ -70,7 +70,7 @@ obs means rows
 variables means columns
 == exact matching
 != does not match
-AND is `&` and OR is `|`
+AND is `&` and OR is `|`, format of whatever is on the sides of &/| needs to be identical
 > or >=, < or <=
 
 ### Assigning values to variable names
