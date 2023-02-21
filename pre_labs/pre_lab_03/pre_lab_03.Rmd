@@ -33,7 +33,9 @@ library(tidyverse)
 
 ### Task 2: Load data
 
-**Task** Load some [Maryland state government payments data](https://opendata.maryland.gov/Budget/State-of-Maryland-Payments-Data-FY2008-to-FY2023/7syw-q4cy) by running the following code. We'll use the guess_max() function as an argument to use the first 10 rows to set the data type. What does the first line of the red Warning message that prints out when you load the data say? What happens when you follow its instructions? Answer below. **Answer** The first line means that there are some rows in the data that don't match up with R's guesses. Following the instructions and using the function problems() shows where these errors are.
+**Task** Load some [Maryland state government payments data](https://opendata.maryland.gov/Budget/State-of-Maryland-Payments-Data-FY2008-to-FY2023/7syw-q4cy) by running the following code. We'll use the guess_max() function as an argument to use the first 10 rows to set the data type. What does the first line of the red Warning message that prints out when you load the data say? What happens when you follow its instructions? Answer below. 
+
+**Answer** The first line means that there are some rows in the data that don't match up with R's guesses. Following the instructions and using the function problems() shows where these errors are.
 
 ```{r}
 payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2023.csv", guess_max=10)
@@ -43,7 +45,9 @@ problems(payments)
 
 ### Task 3: Reload data
 
-**Task** Run the following codeblock to reload the data, using every row to set the data types. Does it show any parsing errors when you run? Answer below **Answer**
+**Task** Run the following codeblock to reload the data, using every row to set the data types. Does it show any parsing errors when you run? Answer below 
+
+**Answer** There are no parsing errors, likely due to the fact that R is looking at all the rows now instead of just a small section to guess the column types.
 
 ```{r}
 payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2023.csv", guess_max=322138)
@@ -51,7 +55,7 @@ payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2023.csv
 
 ### Task 4: Examine the data with glimpse
 
-**Task** Run the following codeblock to glimpse the data. What data type is the "district" field? What data type is the "precinct" field? What data type is the "mail" column? Answer below. **Answer**
+**Task** Run the following codeblock to glimpse the data. What data type is the "district" field? What data type is the "precinct" field? What data type is the "mail" column? Answer below. **Answer** SKIPPED
 
 ```{r}
 glimpse(payments)
@@ -66,7 +70,7 @@ The second smell we can find in code is **wrong spatial data**. Spatial data mea
 We can check to see if any of the zip codes are less than five characters by using [a function called `str_length`](https://stringr.tidyverse.org/reference/str_length.html) inside a filter.
 
 **Task** Run the following codeblock to group by the vendor's zip code and show any that are less than five characters in length. How many zip codes do not have five characters? What do you think is happening with this data? 
-**Answer**
+**Answer** There are 540 zip codes that do not have 5 characters.
 
 ```{r}
 payments %>%
@@ -142,7 +146,8 @@ Let's get cleaning. Our goal will be to build up one block of code that does all
 
 ### Task 3: Use clean_names()
 
-**Task** Run the following codeblock to use the `clean_names()` function from janitor to standardize column names. How does the function change the headers? Answer below. **Answer** The headers are all standardized now as "one word" by turning two-word columns into all lowercase with _ replacing the spaces. One word columns are also all lowercase now.
+**Task** Run the following codeblock to use the `clean_names()` function from janitor to standardize column names. How does the function change the headers? Answer below. 
+**Answer** The headers are all standardized now as "one word" by turning two-word columns into all lowercase with _ replacing the spaces. One word columns are also all lowercase now.
 
 ```{r}
 # cleaning function
@@ -186,7 +191,8 @@ cleaned_md_grants_loans
 
 ### Task 6: Check for duplicate rows
 
-**Task** Run the following codeblock to check for duplicate rows using get_dupes(). How many duplicates are possible? **Answer**
+**Task** Run the following codeblock to check for duplicate rows using get_dupes(). How many duplicates are possible? 
+**Answer** I skipped this accidentally and went ahead and cleared the duplicate rows.
 
 ```{r}
 cleaned_md_grants_loans %>%
@@ -217,7 +223,8 @@ Let's start by cleaning up the zip field. Remember, some of the rows had a five-
 
 We're going to write code that tells R to make a new column for our zips, keeping the first five digits on the left, and get rid of anything after that by using `mutate()` in concert with `str_sub()`, from the `stringr` package.
 
-**Task** Run the following codeblock to use str_sub() to convert the ZIP codes that have nine digits to five digits, creating a new column. Look at the difference in the result - what changed? **Answer** This displays rows that qualify by displaying 5-character zip codes.
+**Task** Run the following codeblock to use str_sub() to convert the ZIP codes that have nine digits to five digits, creating a new column. Look at the difference in the result - what changed? 
+**Answer** This displays rows that qualify by displaying 5-character zip codes.
 
 ```{r}
 # cleaning function
@@ -281,7 +288,26 @@ cleaned_md_grants_loans
 ### Task 11: Answer our question!
 
 **Task** Write and run code to answer our original question: which zip code has gotten the most amount of money from the Maryland Tourism Board?
+**Answer** 20001
 
 ```{r}
+cleaned_md_grants_loans <- md_grants_loans %>%
+  clean_names() %>% 
+  rename(source = grantor) %>% 
+  mutate(source = str_to_upper(source), grantee = str_to_upper(grantee), description = str_to_upper(description)) %>% 
+  distinct() %>%
+  mutate(zip5 = str_sub(zip_code, start=1L, end=5L)) %>%
+  mutate(zip5 = case_when(
+    zip5 == "Vario" ~ as.character(NA),
+    str_detect(zip5, "^UB7") ~ as.character(NA),
+    TRUE ~ zip5
+  ))
+
+cleaned_md_grants_loans %>%
+  group_by(zip_code) %>% 
+  summarise(
+    total_amount = sum(amount)
+  ) %>%
+  arrange(desc(total_amount))
 
 ```
