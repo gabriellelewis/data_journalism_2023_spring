@@ -70,7 +70,7 @@ pg_schools %>%
 ```
 Q3. You're interested in examining the vendors paid for capital projects at the University of Maryland. Search the payments data to find those payments, then write code to produce a list of each vendor and the total amount it received. Look carefully at that list - what cleaning will it require to ensure that you have only one row per vendor and zip code? Provide at least three examples of vendor names that are similar and should be combined into one. Describe how you might clean that data so that any nearly identical vendors would look identical - what would you change and how?
 
-A3. To clean the data so nearly identical vendors are combined, my first thought is to mutate these vendors' names and use the case_when() function. Examples of vendors with name variations throughout the data are Plano-Coudon, LLC (variation of Plano-Coudon LLC), Cannon Design (variation of Cannon Design Inc and Cannon Washington Inc) and Olympus America Inc. (variation of Olympus America Inc). For vendors like these, the case_when() function would show if a row contains key terms found in all the variations — for example, both Olympus America Inc. variations have "Olympus America Inc" no period — in that case, they would both be given the same name to make the identical.
+A3. To clean the data so nearly identical vendors are combined, my first thought is to mutate these vendors' names and use the case_when() function. Examples of vendors with name variations throughout the data are Plano-Coudon, LLC (variation of Plano-Coudon LLC), A Morton Thomas & Associates Inc (variation of A Morton Thomas & Assoc Inc) and Olympus America Inc. (variation of Olympus America Inc). For vendors like these, the case_when() function would show if a row contains key terms found in all the variations — for example, both Olympus America Inc. variations have "Olympus America Inc" no period — in that case, they would both be given the same name to make the identical.
 
 ```{r}
 cleaned_payments %>%
@@ -81,8 +81,7 @@ cleaned_payments %>%
   summarise(
     total_amount=sum(amount)
   ) %>%
-
-  arrange(desc(total_amount))
+  arrange(vendor_name)
 ```
 
 Q4: You want to understand how much state grant money went to stem cell research projects each fiscal year. Search the data to find grants that fit that description. Once you find which columns contain the information you want, your code should standardize the data needed to find just the grants for stem cell research in a single filter. Then create a total amount of money for each fiscal year. Write a sentence summarizing how stem cell research funding has changed over time.
