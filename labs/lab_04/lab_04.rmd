@@ -24,7 +24,9 @@ You'll need to load three packages for this: the tidyverse, lubridate and janito
 ```{r}
 # Turn off scientific notation
 options(scipen=999)
-
+library(tidyverse)
+library(lubridate)
+library(janitor)
 ```
 
 For this lab, we want to investigate spending by Maryland state and local candidates during the 2022 election. For example, we could ask how much money have candidates and committees spent on advertising on Facebook? Which vendors received the most money for media expenses? We have the data, but it's messy - names of payees are spelled differently and capitalized differently - and we need to clean it up. We'll use a combination of RStudio and OpenRefine to do that.
@@ -44,11 +46,27 @@ You'll need to load one data set, a CSV file of Maryland campaign expenditures l
 
 ```{r}
 # Load the Maryland expenditures data table, clean the column names and convert columns with dates into actual dates.
+md_campaign_expenditures <- read.csv("data/maryland_expenses.csv")
+
+md_campaign_expenditures <- md_campaign_expenditures %>%
+  clean_names()
+
+md_campaign_expenditures <- md_campaign_expenditures %>% mutate(expenditure_date=mdy(expenditure_date))
+
 ```
 
 ## Answer questions
 
-**Q1.** You've been assigned to write about Maryland political committees' use of Facebook advertising. There's a category column in the data that has values for different kinds of spending. One of them is "Media". Write code to isolate Media expenses where the name of the payee is not NA. Then, using the `write_csv` function, make a CSV file of those media expenses in your data folder. Using OpenRefine, create a project using that CSV file, create a copy of the `payee_name` column called `payee_clean` and then standardize it, focusing your work on the payees that appear most often. Pay particular attention to variations of Facebook, bearing in mind that it changed its name in 2021: https://about.fb.com/news/2021/10/facebook-company-is-now-meta/).
+**Q1.** You've been assigned to write about Maryland political committees' use of Facebook advertising. There's a category column in the data that has values for different kinds of spending. One of them is "Media". Write code to isolate Media expenses where the name of the payee is not NA. 
+
+```{r}
+media_expenses <- md_campaign_expenditures %>%
+  filter(payee_name !="" & expense_category == "Media")
+
+write_csv(media_expenses, )
+```
+
+Then, using the `write_csv` function, make a CSV file of those media expenses in your data folder. Using OpenRefine, create a project using that CSV file, create a copy of the `payee_name` column called `payee_clean` and then standardize it, focusing your work on the payees that appear most often. Pay particular attention to variations of Facebook, bearing in mind that it changed its name in 2021: https://about.fb.com/news/2021/10/facebook-company-is-now-meta/).
 
 Then, when you are done standardizing `payee_clean`, export it as a new CSV file to your data folder, *giving that file a different name* and read it back into RStudio as a new dataframe.
 
