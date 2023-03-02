@@ -63,7 +63,7 @@ md_campaign_expenditures <- md_campaign_expenditures %>% mutate(expenditure_date
 media_expenses <- md_campaign_expenditures %>%
   filter(payee_name !="" & expense_category == "Media")
 
-write_csv(media_expenses, )
+write_csv(media_expenses, "data/file.csv")
 ```
 
 Then, using the `write_csv` function, make a CSV file of those media expenses in your data folder. Using OpenRefine, create a project using that CSV file, create a copy of the `payee_name` column called `payee_clean` and then standardize it, focusing your work on the payees that appear most often. Pay particular attention to variations of Facebook, bearing in mind that it changed its name in 2021: https://about.fb.com/news/2021/10/facebook-company-is-now-meta/).
