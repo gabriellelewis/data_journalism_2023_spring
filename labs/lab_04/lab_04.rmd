@@ -72,7 +72,7 @@ Then, when you are done standardizing `payee_clean`, export it as a new CSV file
 
 Then, using that `payee_clean` column, write code to find all of the spending where Facebook is the payee and calculate the total amount of spending for each committee and present the results showing the committee that spent the most first. Which committee is that?
 
-**A1.** The top committee is "Franchot Peter Friends of", which most likely is actualy Friends Of Peter Franchot. In total, the committee paid $36,372.68 to Facebook.
+**A1.** The top committee is "Franchot Peter Friends of", which most likely is actually Friends Of Peter Franchot. In total, the committee paid $36,372.68 to Facebook.
 
 ```{r}
 cleaned_media_expenses <- read.csv("data/cleaned-media-expenses-csv.csv") %>%
@@ -94,7 +94,7 @@ Peter Franchot's ads in the Facebook ad library feature typical political ads su
 
 **Q3.** Given the list of top spenders in A1 and the primary results for governor (https://elections.maryland.gov/elections/2022/primary_results/gen_results_2022_1.html), who is missing from that A1 list? Did those campaigns run Facebook ads, according to Facebook's ad library? Who are the biggest recipients of media expenses by the Democratic primary winner for governor (HINT: that person has two committees)?
 
-**A3.** Several other candidates — Moore and Miller, Jaffe and Greben, Gansler and Hollingsworth, Baker and Navarro, Perez and Sneed, and Segal and Dispenza — are not in the top 10 committees paying money to Facebook. From what I searcher, Gansler and Hollingsworth and Jaffe and Greben did not have Facebook ads. The top recipients of media expenses from Moore and Miller are SKDK, Fodlamp, Apollo Artistry, Shauna Henson, The Baltimore Times, Pivor Group, DMGlobal Marketing & PR and Maryland Jewish Media. The ads I saw in the ad library for Wes Moore's campaign said they were paid for by "Wes Moore for Maryland," which is interesting because Facebook and Meta don't show up on this list.
+**A3.** Several other candidates — Moore and Miller, Jaffe and Greben, Gansler and Hollingsworth, Baker and Navarro, Perez and Sneed, and Segal and Dispenza — are not in the top 10 committees paying money to Facebook. From what I searcher, Gansler and Hollingsworth and Jaffe and Greben did not have Facebook ads. The top recipients of media expenses from Moore and Miller are SKDK, Fodlamp, Apollo Artistry, Shauna Henson, The Baltimore Times, Pivot Group, DMGlobal Marketing & PR and Maryland Jewish Media. The ads I saw in the ad library for Wes Moore's campaign said they were paid for by "Wes Moore for Maryland," which is interesting because Facebook and Meta don't show up on this list, but some of the recipients of Moore's committee payments are marketing groups who may be responsible for his ads.
 
 ```{r}
 cleaned_media_expenses %>%
@@ -107,12 +107,19 @@ cleaned_media_expenses %>%
 
 **Q4.** The media expense data you cleaned also has a standardized purpose column. Write code to generate a list of the committees with the total amount of spending on online advertising. How does this list compare to the one from Q1 about top Facebook spenders? Of the top 5 committees who spent the most on Facebook ads from Q1, are there any that appear to have spent *all* of their online advertising dollars on Facebook?
 
-**A4.** 
+**A4.** Compared to the list from Q1, 5 of top 10 committees here are for political candidates, 4 are activist or lobbying groups and one is a government group, the state's Democratic Senate Caucus Committee. There are no committees that spent *all* their online advertising dollars on Facebook, but John King for Governor spent the majority of his on Facebook, with the data showing 39 payments made by this committee to Facebook.
 
 ```{r}
-
+cleaned_media_expenses %>%
+  filter(expense_purpose == "Online Advertising") %>%
+  group_by(committee_name) %>%
+  summarise(
+    total_amount=sum(amount),
+    payee_clean
+    ) %>%
+  arrange(desc(total_amount))
 ```
 
 **Q5** You've been asked to summarize your findings about spending on Facebook by Maryland political candidates. How much do we know and what don't we know? What's the best story idea you've found here?
 
-**A5**
+**A5** We know which political candidates paid the most money specifically to Facebook. However, given that other political candidates that didn't make payments to Facebook specifically also had Facebook ads up during their campaigns, we don't know how which of the recipients of their respective committees' media payments had those Facebook ads go up. It's difficult to get a fully accurate picture on how much each candidate technically spent on Facebook because of this. I think it'd be an interesting story overall to look at which companies received the most from candidates and looking into what those companies did with the money. An example is SKDK, which is a public affairs and political consulting firm for Democratic candidates, which Wes Moore's committees paid the most money to. I'd be interested in learning what SKDK did with all the money they got from him.
