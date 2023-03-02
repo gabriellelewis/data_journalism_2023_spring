@@ -72,20 +72,37 @@ Then, when you are done standardizing `payee_clean`, export it as a new CSV file
 
 Then, using that `payee_clean` column, write code to find all of the spending where Facebook is the payee and calculate the total amount of spending for each committee and present the results showing the committee that spent the most first. Which committee is that?
 
-**A1.**
+**A1.** The top committee is "Franchot Peter Friends of", which most likely is actualy Friends Of Peter Franchot. In total, the committee paid $36,372.68 to Facebook.
 
 ```{r}
+cleaned_media_expenses <- read.csv("data/cleaned-media-expenses-csv.csv") %>%
+  mutate(payee_clean = str_to_upper(payee_clean))
+
+cleaned_media_expenses %>%
+  filter(str_detect(payee_clean, "FACEBOOK") | str_detect(payee_clean, "META") | str_detect(payee_clean, "FACE BOOK")) %>%
+  group_by(committee_name) %>%
+  summarise(
+    total_amount=sum(amount)
+  ) %>%
+  arrange(desc(total_amount))
 ```
 
 **Q2.** Let's do some research on the top committees from question 1. Look up the top 10 spenders: if they are candidate committees, what offices were they running for? If they were not candidates, what issues do they seem to care about? Write some sentences answering those questions, then go the Facebook ad library (https://www.facebook.com/ads/library/?active_status=all&ad_type=political_and_issue_ads&country=US&sort_data\[direction\]=desc&sort_data\[mode\]=relevancy_monthly_grouped&media_type=all) and look for ads from the top spender. What do you notice about those ads?
 
-**A2.** 
+**A2.** Out of the top 10 committees, 8 of them were for various candidates. Two of these committees were for individuals running for Maryland Slate. The other 6 candidate committees ran for different positions, such as governor, county executive positions, respective county councils and a seat in the MD House of Delegates. The other 2 committees in the top 10 are CASA in Action, which is an activist group supporting candidates that align with its ideals, and the WFP National PAC from the Working Families Party, which is a lobbying group supporting candidates.
+Peter Franchot's ads in the Facebook ad library feature typical political ads such as promotional videos and graphics, as well as posts from Franchot's account promoted as ads that show him interacting with different groups in the community. These ads also illustrated Franchot's ideas for the governor position.
 
 **Q3.** Given the list of top spenders in A1 and the primary results for governor (https://elections.maryland.gov/elections/2022/primary_results/gen_results_2022_1.html), who is missing from that A1 list? Did those campaigns run Facebook ads, according to Facebook's ad library? Who are the biggest recipients of media expenses by the Democratic primary winner for governor (HINT: that person has two committees)?
 
-**A3.** 
+**A3.** Several other candidates — Moore and Miller, Jaffe and Greben, Gansler and Hollingsworth, Baker and Navarro, Perez and Sneed, and Segal and Dispenza — are not in the top 10 committees paying money to Facebook. From what I searcher, Gansler and Hollingsworth and Jaffe and Greben did not have Facebook ads. The top recipients of media expenses from Moore and Miller are SKDK, Fodlamp, Apollo Artistry, Shauna Henson, The Baltimore Times, Pivor Group, DMGlobal Marketing & PR and Maryland Jewish Media. The ads I saw in the ad library for Wes Moore's campaign said they were paid for by "Wes Moore for Maryland," which is interesting because Facebook and Meta don't show up on this list.
 
 ```{r}
+cleaned_media_expenses %>%
+  mutate(committee_name = str_to_upper(committee_name)) %>%
+  filter(str_detect(committee_name, "MOORE")) %>%
+  group_by(payee_clean) %>%
+  summarise(total_amount=sum(amount)) %>%
+  arrange(desc(total_amount))
 ```
 
 **Q4.** The media expense data you cleaned also has a standardized purpose column. Write code to generate a list of the committees with the total amount of spending on online advertising. How does this list compare to the one from Q1 about top Facebook spenders? Of the top 5 committees who spent the most on Facebook ads from Q1, are there any that appear to have spent *all* of their online advertising dollars on Facebook?
