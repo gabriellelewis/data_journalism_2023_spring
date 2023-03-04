@@ -1,7 +1,7 @@
 ---
 title: "Reverse Engineering Project"
-author: "Student names here"
-date: "Date here"
+author: "Gabrielle Lewis, Damon Brooks"
+date: "2023-03-04"
 output:
   html_document:
     theme: cerulean
@@ -18,14 +18,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction 
 
-In this notebook, we are reverse engineering the story, [STORY NAME](STORY URL)
+In this notebook, we are reverse engineering the story, [Why Many Americans Don't Vote](https://projects.fivethirtyeight.com/non-voters-poll-2020-election/)
 
 ## Load libraries
 
 Loading required libraries for this analysis.
 
 ```{r echo=FALSE, message=FALSE}
-
+# Turn off scientific notation
+options(scipen=999)
+library(tidyverse)
+library(lubridate)
+library(janitor)
 ```
 
 ## Load and Cleaning Data
@@ -34,7 +38,7 @@ In this section, describe the source of the data, write a basic data dictionary 
 
 ```{r}
 # Load required data
-
+nonvoters_data <- read.csv("data/nonvoters_data.csv")
 # Path to data should be loaded from folder "data" i.e. read_csv("data/name_of_data.csv")
 
 # Clean required data and prepare for analysis if needed. 
