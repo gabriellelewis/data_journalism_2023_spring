@@ -39,10 +39,8 @@ In this section, describe the source of the data, write a basic data dictionary 
 ```{r}
 # Load required data
 nonvoters_data <- read.csv("data/nonvoters_data.csv")
-# Path to data should be loaded from folder "data" i.e. read_csv("data/name_of_data.csv")
 
 # Clean required data and prepare for analysis if needed. 
-
 
 ```
 
@@ -51,19 +49,27 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 1
 
-* **Sentence text**: [Paste in sentence to engineer here]
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+* **Sentence text**: People who sometimes vote were a plurality of the group (44 percent), while 31 percent nearly always cast a ballot and just 25 percent almost never vote."
+* **Analysis summary**: The results reflect what was written in story, which is that out of all the survey respondents, about 44% — the majority — were sporadic voters, about 31% were frequent voters, and about 25% almost never voted.
 
 ```{r}
 # Put code to reverse engineer sentence here
-
+nonvoters_data %>%
+  group_by(voter_category) %>%
+  summarise(
+    count=n()
+  ) %>%
+  mutate(
+    category_percentage=(count/sum(count))*100
+  ) %>%
+  arrange(desc(count))
 # Display results of code below this codeblock
 
 ```
 
 ### Sentence 2
 
-* **Sentence text**: [Paste in sentence to engineer here]
+* **Sentence text**: "Nonvoters were more likely to have lower incomes; to be young; to have lower levels of education; and to say they don’t belong to either political party, which are all traits that square with what we know about people less likely to engage with the political system."
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
 
 ```{r}
@@ -75,7 +81,7 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 3
 
-* **Sentence text**: [Paste in sentence to engineer here]
+* **Sentence text**: "For instance, people who vote more irregularly are a little more likely than those who almost always vote to have lost a job in the past year (13 percent vs. 10 percent) or to have worried about expenses (21 percent vs. 16 percent), although those who almost never vote are even likelier than those who sometimes vote to have reported these experiences."
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
 
 ```{r}
@@ -87,7 +93,7 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 4
 
-* **Sentence text**: [Paste in sentence to engineer here]
+* **Sentence text**: "Our survey found, for instance, that occasional voters were slightly more likely than frequent voters to have a long-term disability (8 percent vs. 5 percent), and nonvoters were even more likely to fall into this category (12 percent)."
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
 
 ```{r}
@@ -99,7 +105,7 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 5
 
-* **Sentence text**: [Paste in sentence to engineer here]
+* **Sentence text**: "In the survey, we asked voters who have missed at least one national election — which included some people who almost always vote — why they didn’t cast a ballot. Nearly a quarter cited some of the structural barriers we mentioned above. But another 31 percent said that they decided not to vote because they disliked the candidates or they thought nothing would change as a result of the election (26 percent)."
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
 
 ```{r}
