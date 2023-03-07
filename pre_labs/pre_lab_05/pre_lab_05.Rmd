@@ -22,6 +22,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # turn off sci notation
 options(scipen=999)
 library(tidyverse)
+library(janitor)
 ```
 
 ## PDF Parsing with Tabula
@@ -38,13 +39,13 @@ When Tabula opens, you click browse to find the PDF on your computer somewhere, 
 knitr::include_graphics(rep("images/md_voters.png"))
 ```
 
-ow you can hit the green "Preview & Export Extracted Data" button on the top right. You should see something very like this:
+or you can hit the green "Preview & Export Extracted Data" button on the top right. You should see something very like this:
 
 ```{r, echo=FALSE}
 knitr::include_graphics(rep("images/md_voters2.png"))
 ```
 
-You can now export that extracted table to a CSV file using the "Export" button. Put it in your pre_lab_06 folder. And then we can read it into R:
+You can now export that extracted table to a CSV file using the "Export" button. Put it in your pre_lab_05 folder. And then we can read it into R:
 
 ### Task 2: Load data
 
@@ -53,7 +54,13 @@ You can now export that extracted table to a CSV file using the "Export" button.
 ```{r}
 voters_by_county <- read_csv("tabula-Eligible Active Voters by County - GP22.csv")
 View(voters_by_county)
+voters_by_county <- voters_by_county %>% slice(-25)
 ```
+```{r}
+voters_by_county <- voters_by_county %>%
+  mutate(pct_dem=DEM/TOTAL*100)
+```
+
 
 Boom - we're good to go.
 
@@ -97,8 +104,8 @@ You can now export that extracted table to a CSV file using the "Export" button.
 
 ### Task 5: Export the CSV file
 
-**Task** Export the CSV file to your pre_lab_06 folder and read it into R by running the following codeblock. What problems do you see with the data? 
-**Answer**
+**Task** Export the CSV file to your pre_lab_05 folder and read it into R by running the following codeblock. What problems do you see with the data? 
+**Answer** R read the first row of the data as column names.
 
 ```{r}
 fentanyl_deaths <- read_csv("tabula-Annual_2020_Drug_Intox_Report.csv") %>% clean_names()
@@ -113,7 +120,7 @@ The good news is that we have data we don't have to retype. The bad news is, we 
 ### Task 6: Load the data without headers
 
 **Task** Load the data without headers by running the codeblock below. What problems remain? 
-**Answer**
+**Answer** There aren't appropriate column names, and there's still periods in the jurisdiction names.
 
 ```{r}
 fentanyl_deaths <- read_csv("tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) %>% clean_names()
@@ -126,7 +133,7 @@ Ok, now we have all the data. But we need actual headers. Let's add those using 
 ### Task 7: Change the headers to real names
 
 **Task** Run the codeblock below. What else do we need to do?
-**Answer**
+**Answer** We need to get rid of the periods in the jurisdiction names.
 
 ```{r}
 fentanyl_deaths <- read_csv("tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) %>% 

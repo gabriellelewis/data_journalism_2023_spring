@@ -37,7 +37,7 @@ library(tidyverse)
 ### Tidyverse Tools
 
 Lubridate -> helps working with date-times and time-spans, can mutate columns into dates that R can interpret, can create new columns from data
-  * functions: mdy, ymd, ymd_hms, floor_date (groups all dates into the first one mentioned of a specific month/year)
+  * functions: mdy, ymd, ymd_hms, floor_date (groups all dates into the first one mentioned of a specific month/year), str_squish() to clean up any       extra space, str_replace_all(column name, 'thing to replace', 'replacement')
 Janitor -> helps clean up data, can standardize column names (ex. Fiscal Year -> fiscal_year)
   * functions: clean_names(), rename(new name = old name), get_dupes() to find duplicates, distinct() to get rid of ALL duplicates
 
@@ -62,6 +62,10 @@ case_when() -> can handle multiple variations, says when the data shows a specif
 str_length() -> string length, is this length in this column?
   
 mutate(column name=function(column name)) -> can change column type
+
+slice(row #) -> cuts out a certain row from data frame
+
+col_names = FALSE -> if R reads a row of data as column names, this tells them that the row is actually data
 
 ### Filters vs. Selections
 
