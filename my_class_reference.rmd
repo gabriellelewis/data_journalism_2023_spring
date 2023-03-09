@@ -37,7 +37,7 @@ library(tidyverse)
 ### Tidyverse Tools
 
 Lubridate -> helps working with date-times and time-spans, can mutate columns into dates that R can interpret, can create new columns from data
-  * functions: mdy, ymd, ymd_hms, floor_date (groups all dates into the first one mentioned of a specific month/year), str_squish() to clean up any       extra space, str_replace_all(column name, 'thing to replace', 'replacement')
+  * functions: mdy, ymd, ymd_hms, floor_date (groups all dates into the first one mentioned of a specific month/year), str_squish() to clean up any       extra space, str_replace_all(column name, 'thing to replace', 'replacement'), wday(df$date column, label = TRUE) to get weekday labels from         date column
 Janitor -> helps clean up data, can standardize column names (ex. Fiscal Year -> fiscal_year)
   * functions: clean_names(), rename(new name = old name), get_dupes() to find duplicates, distinct() to get rid of ALL duplicates
 
