@@ -70,6 +70,9 @@ nonvoters_data %>%
 ### Sentence 2
 
 * **Sentence text**: "Nonvoters were more likely to have lower incomes; to be young; to have lower levels of education; and to say they don’t belong to either political party, which are all traits that square with what we know about people less likely to engage with the political system."
+
+The sentence asks us to find the percentages of each voter category group that reported the lowest income bracket, the youngest age group, the lowest level of education, and not identifying with either major political party in the survey.
+
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
 
 ```{r}
@@ -82,14 +85,37 @@ nonvoters_data %>%
 ### Sentence 3
 
 * **Sentence text**: "For instance, people who vote more irregularly are a little more likely than those who almost always vote to have lost a job in the past year (13 percent vs. 10 percent) or to have worried about expenses (21 percent vs. 16 percent), although those who almost never vote are even likelier than those who sometimes vote to have reported these experiences."
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+
+The sentence seems to be asking for code that shows the number of occurrences of each response (yes = 1 and no = 2) under each voter category, then converting that number into a percentage of the voter category group.
+
+* **Analysis summary**: About 10% of people who always vote, about 13% of people who sometimes vote and about 18% of people who rarely vote worried about a lost job at the time of this story. This lines up with what the story said that those who rarely vote are more likely to report having lost a job than those who always or sometimes vote. For the next question, about 15% of people who always vote, about 21% of people who sometimes vote, and about 33% of people who rarely vote reported worrying about expenses. This lines up with the story's sentence that people who rarely vote report this concern more than the other two voting groups, but the percentage of people who always vote that we found is 15.4, which doesn't technically round up to the 16% written in the story. The 21% finding remains accurate.
+
 
 ```{r}
 # Put code to reverse engineer sentence here
+nonvoters_data %>%
+  group_by(voter_category) %>%
+  count(Q11_1) %>%
+  mutate(
+    pct_lostjob_always=(179/1811)*100,
+    pct_lostjob_sporadic=(330/2574)*100,
+    pct_lostjob_never=(258/1451)*100
+  )
 
 # Display results of code below this codeblock
 
 ```
+```{r}
+nonvoters_data %>%
+  group_by(voter_category) %>%
+  count(Q11_5) %>%
+  mutate(
+    pct_expenses_always=(279/1811)*100,
+    pct_expenses_sporadic=(541/2574)*100,
+    pct_expenses_never=(472/1451)*100
+  )
+```
+
 
 ### Sentence 4
 
