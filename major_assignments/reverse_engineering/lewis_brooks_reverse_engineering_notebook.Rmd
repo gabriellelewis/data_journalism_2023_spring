@@ -78,6 +78,27 @@ The sentence asks us to find the percentages of each voter category group that r
 ```{r}
 # Put code to reverse engineer sentence here
 
+# lower incomes
+nonvoters_data %>%
+  group_by(income_cat, voter_category) %>%
+  summarise(
+    count=n()
+  )
+
+# age
+nonvoters_data %>%
+  group_by(ppage, voter_category) %>%
+  summarise(
+    count=n()
+  )
+
+# education level
+nonvoters_data %>%
+  group_by(educ, voter_category) %>%
+  summarise(
+    count=n()
+  )
+
 # Display results of code below this codeblock
 
 ```
