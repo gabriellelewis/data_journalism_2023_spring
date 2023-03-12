@@ -73,7 +73,7 @@ nonvoters_data %>%
 
 The sentence asks us to find the percentages of each voter category group that reported the lowest income bracket, the youngest age group, the lowest level of education, and not identifying with either major political party in the survey.
 
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+* **Analysis summary**: Based on my findings, I’ve learned that the voter_category titled “Rarely/never” with a college education has the lowest count of 423. While, the voter category titled “sporadic” with a college education has the highest count of 1073. Furthermore, my findings have shown me that having a college education will translate into a higher income, regardless of voting category. I think we were able to confirm the findings because we have sufficient to support the results. 
 
 ```{r}
 # Put code to reverse engineer sentence here
