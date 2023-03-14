@@ -32,7 +32,7 @@ library(lubridate)
 Let's say that we have Maryland county voter registration data from four different elections in three different files. They have a similar layout and the same number of counties (plus Baltimore City).
 
 **Task** Load the four CSV population estimate files. Do they have the same column structure? 
-**Answer**
+**Answer** They do have the same column structure, although the order of the columns in 2016 and 2018 are the same while the order of the columns for 2020 and 2022 are the same.
 
 ```{r}
 county_voters_2016 <- read_csv("data/county_voters_2016.csv")
@@ -54,7 +54,7 @@ View(county_voters_combined)
 ### Task 4: Asking a question
 
 **Task** Run the following code to filter on Frederick County's registration data and look at the results. What stands out to you about the changes in party registration over time?
-**Answer** 
+**Answer** For all parties except LIB or GRN, the numbers of registered voters has increased from 2016 to 2022. For LIB and GRN, registration dipped in 2020 notably before picking back up in 2022.
 
 ```{r}
 county_voters_combined %>% filter(COUNTY == 'Frederick')
@@ -74,7 +74,7 @@ view(maryland_population)
 ### Task 6: Join population and voter data
 
 **Task** Run the following code to join Maryland population data and the 2022 voter registration data together using the common column county as the key. How many rows are there now? How many *should* there be? 
-**Answer**
+**Answer** There are 24 rows, which is how many there should be.
 
 ```{r}
 # with nrow included to show row total
@@ -119,7 +119,7 @@ maryland_population_with_voters_and_demographics <- maryland_population_with_vot
 ### Task 11: Asking Demographic Questions
 
 **Task** Using mutate, let's find the county with the highest 18+ Black population as a percentage of all population 18 and over and also the percentage of Democrats in that county. Put your answers below. 
-**Answer**
+**Answer** Prince George's County has the highest percentage for 18+ Black population and highest percentage of Democrats in the county.
 
 ```{r}
 maryland_population_with_voters_and_demographics %>%
@@ -131,7 +131,7 @@ maryland_population_with_voters_and_demographics %>%
 ### Task 12: Asking Demographic Questions
 
 **Task** Now let's find the county with the highest 18+ Asian population as a percentage of all population 18 and over and also the percentage of Democrats in that county. How do these results compare to the previous task? Put your answers below. 
-**Answer**
+**Answer** Howard County has the highest percentage for 18+ Asian population, but it doesn't have the highest percentage of Democrats. It has about 53%, while Prince George's County still has the most at about 77%.
 
 ```{r}
 maryland_population_with_voters_and_demographics %>%
@@ -145,7 +145,7 @@ maryland_population_with_voters_and_demographics %>%
 Sometimes joins look like they should work but don't. Often this is due to the two columns you're joining on having different data types: joining a <chr> column to a <dbl> column, for example. Let's walk through an example of that using some demographic data by zip code.
 
 **Task** Run the following code to load the Zip Code Tabulation Area data for Maryland. What's the datatype of the ZCTA5N column? 
-**Answer**
+**Answer** It's a double (number) column.
 
 ```{r}
 maryland_zcta <- read_csv('data/maryland_zcta.csv')
@@ -155,10 +155,11 @@ glimpse(maryland_zcta)
 The column we're interested in, ZCTA5N, is a <dbl> column - it's a number. We want it to be a <chr> column - text.
 
 **Task** Run the following code to change the datatype of ZCTA5N from numeric to character. What's the datatype of ZCTA5N? 
-**Answer**
+**Answer** It's now a character column.
 
 ```{r}
 maryland_zcta <- maryland_zcta %>% mutate(ZCTA5N = as.character(ZCTA5N))
+glimpse(maryland_zcta)
 ```
 
 Now we can join this dataframe to other zip code data where the zip code column is text, not numbers.
