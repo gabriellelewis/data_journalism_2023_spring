@@ -16,7 +16,9 @@ knitr::opts_chunk$set(echo = TRUE)
 options(scipen=999)
 
 # load your libraries
-
+library(tidyverse)
+library(lubridate)
+library(janitor)
 ```
 
 ## Getting Started
@@ -27,30 +29,60 @@ This week we'll be combining and joining data to make it more useful and to ask 
 
 ```{r}
 # load and combine the call data from those three counties
+cecil_county_calls <- read_csv('data/cecil_911.csv') %>% clean_names()
+carroll_county_calls <- read_csv('data/carroll_911.csv') %>% clean_names()
+allegany_county_calls <- read_csv('data/allegany_911.csv') %>% clean_names()
+
+combined_cecil_carroll_allegany <- bind_rows(list(cecil_county_calls, carroll_county_calls, allegany_county_calls))
 ```
 
 Then we'll join some demographic data with Baltimore City 911 calls and ask some questions of that. For that, you'll need to load the Baltimore City 911 data and the ZCTA demographic data, and join them based on the zip code. Remember, the zip codes in both dataframes must be the same datatype (and should be characters). You should start with your Baltimore 911 dataframe in creating your join. 
 
 ```{r}
 # load and join the Baltimore-related data
+baltimore_city_calls <- read_csv('data/baltimore_911.csv') %>% clean_names() %>% mutate(zip_code = as.character(zip_code))
+maryland_zcta <- read_csv('data/maryland_zcta.csv') %>% clean_names() %>% mutate(zcta5n = as.character(zcta5n))
+
+balt_zcta_join <- baltimore_city_calls %>% left_join(maryland_zcta, by=c("zip_code"="zcta5n"))
 ```
 
 ## Answer questions
 
-Q1. Let's start with our data from Allegany, Harford and Carroll counties. Write code to generate a dataframe that shows the total number of calls for each county. What's the order of counties from most calls to least?
+Q1. Let's start with our data from Allegany, Cecil and Carroll counties. Write code to generate a dataframe that shows the total number of calls for each county. What's the order of counties from most calls to least?
 
-A1. 
+**A1.** The order of the counties from most to least calls is Carroll, Cecil, then Allegany.
 
 ```{r}
+combined_cecil_carroll_allegany %>%
+  group_by(county) %>%
+  summarise(
+    count=n()
+  ) %>%
+  arrange(desc(count))
 ```
 
 Q2. In your combined dataframe that you used in A1, add a column for the month of each call, then write code to show the total number of calls per county and month. Are there any outliers or noteworthy results? Describe the general pattern of the results. 
 
 Then calculate the most calls per county and location. Which location had the most calls - where and what is that location?
 
-A2.
+**A2.** For the first part of the question, for Allegany County, the number of calls in January and November are outliers at 17 and 18, respectively, while the rest of the numbers are between 24 and 50. For Carroll County, the number of calls is generally consistently between the 30-40 range except for September, which had 23 calls. For Cecil County, calls were also consistently between the 20-40 range, but they peaked in August at 55 calls.
+
+For the second part of the question, the location with the highest number of calls was 314 Grove Neck Road in Earleville, MD, in Cecil County. When looking at the location on Google Maps, it looks like a road intersection leading into some kind of community based on the flowers and sign on either side of one of the roads at the intersection.
 
 ```{r}
+combined_cecil_carroll_allegany %>%
+  mutate(month = floor_date(date, "month")) %>%
+  group_by(county, month) %>%
+  summarise(
+    count=n()
+  )
+
+combined_cecil_carroll_allegany %>%
+  group_by(county, location) %>%
+  summarise(
+    count=n()
+  ) %>%
+  arrange(desc(count))
 ```
 
 Q3. Let's turn to the Baltimore City data. You're interested in exploring calls in zip codes with a high percentage of children under 18. Write code to isolate calls in zip codes where the percentage of under 18 population is at least 75% and then show the zip code and population and how many calls occurred in each of those zip codes. 
@@ -61,14 +93,45 @@ Add a column to your code that calculates the number of calls per 1,000 people f
 
 Which zip code has the highest rate of calls per 1,000 people? Find the neighborhoods in that zip code that are listed in the data - you can use group_by or distinct to do this. What are some of those neighborhoods, and what else can you tell me about the population there?
 
-A3. 
+**A3.** For the first part of this question, the zip codes are all relatively close to one another and cover the general area of downtown Baltimore, including popular areas like Fell's Point and the Maryland Zoo. This indicates that these areas usually have lots of people and get a lot of foot traffic.
+
+For the second part of this question, the zip code with the highest rate of calls per 1,000 people is 21217 with about 21 calls per 1,000 people. Some of the neighborhoods in this zip code include Penn North, Sandtown-Winchester, Upton, and Druid Heights. According to the data, for this zip code, the majority of the population, about 86% is Black and non-Hispanic. A majority of the population, about 82%, is also under 18, while about 11% is over the age of 65. About 70% of the population also rents, compared to only about 22% that own homes.
 
 ```{r}
+balt_zcta_join %>%
+  filter(pct_under_18 >= 75) %>%
+  group_by(zip_code, population) %>%
+  summarise(
+    count=n()
+  ) %>%
+  mutate(
+    calls_per_1k = (count/population) * 1000
+  ) %>%
+  arrange(desc(calls_per_1k))
+
+balt_zcta_join %>%
+  filter(zip_code == 21217) %>%
+  group_by(neighborhood)
 ```
 
 Q4. Choose your own adventure: I want you to come up with a question you could ask of the Baltimore City data that combines both the calls and the demographic information. You must use both demographics and the overdose call data in your work.
 
-A4: 
+**A4:** Which zip code has the lowest number of calls per 1,000 people and have a population of at least 50,000? What neighborhoods are in this zip code?
+
+The zip code with the lowest number of calls per 1,000 people and a population of over 50,000 is 21234, with a rate of 0.29 calls per 1,000 people. I find this result really interesting, considering that this zip code also has the highest population out of the 4 with a population of at least 50,000. Neighborhoods in this zip code include North Hartford Road and Hamilton Hills.
 
 ```{r}
+balt_zcta_join %>%
+  filter(population >=50000) %>%
+  group_by(zip_code, population) %>%
+  summarise(
+    count=n()
+  ) %>%
+  mutate(
+    calls_per_1k = (count/population) * 1000
+  )
+
+balt_zcta_join %>%
+  filter(zip_code == 21234) %>%
+  group_by(neighborhood)
 ```
