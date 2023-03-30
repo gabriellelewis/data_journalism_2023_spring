@@ -83,6 +83,9 @@ nonvoters_data %>%
   group_by(income_cat, voter_category) %>%
   summarise(
     count=n()
+  ) %>%
+    mutate(
+    percent = count/sum(count) * 100
   )
 
 # age
@@ -90,6 +93,9 @@ nonvoters_data %>%
   group_by(ppage, voter_category) %>%
   summarise(
     count=n()
+  ) %>%
+    mutate(
+    percent = count/sum(count) * 100
   )
 
 # education level
@@ -97,6 +103,9 @@ nonvoters_data %>%
   group_by(educ, voter_category) %>%
   summarise(
     count=n()
+  ) %>%
+    mutate(
+    percent = count/sum(count) * 100
   )
 
 # Display results of code below this codeblock
@@ -163,23 +172,23 @@ The sentence is asking for us to use code to figure out the percentage of "Yes" 
 nonvoters_data %>%
   group_by(Q19_2) %>%
   summarise(
-    n = n()
+    responses = n()
     ) %>%
-  mutate(Freq = n/sum(n)*100)
+  mutate(Freq = responses/sum(responses)*100)
 
 nonvoters_data %>%
   group_by(Q19_3) %>%
   summarise(
-    n = n()
+    responses = n()
     ) %>%
-  mutate(Freq = n/sum(n)*100)
+  mutate(Freq = responses/sum(responses)*100)
 
 nonvoters_data %>%
   group_by(Q19_6) %>%
   summarise(
-    n = n()
+    responses = n()
     ) %>%
-  mutate(Freq = n/sum(n)*100)
+  mutate(Freq = responses/sum(responses)*100)
 # Display results of code below this codeblock
 
 ```
