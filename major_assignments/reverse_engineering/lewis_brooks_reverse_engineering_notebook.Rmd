@@ -150,10 +150,14 @@ nonvoters_data %>%
 ### Sentence 4
 
 * **Sentence text**: "Our survey found, for instance, that occasional voters were slightly more likely than frequent voters to have a long-term disability (8 percent vs. 5 percent), and nonvoters were even more likely to fall into this category (12 percent)."
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+* **Analysis summary**: We were able to confirm the findings. We learned about 8% of sporadic voters reported a long term disability. About 5% of voters who always vote reported that they have a long term disability. Roughly 12% of voters who say they rarely or never vote reported that they have a long term disability.
 
 ```{r}
 # Put code to reverse engineer sentence here
+nonvoters_data %>%
+  group_by(voter_category, Q10_1) %>%
+  summarise(responses=n()) %>%
+  mutate(New_percent = responses/sum(responses)*100)
 
 # Display results of code below this codeblock
 
