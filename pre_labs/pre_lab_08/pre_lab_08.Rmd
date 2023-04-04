@@ -31,7 +31,7 @@ The dataset we'll use is 911 overdose calls from Baltimore County. Let's load it
 
 ### Task 2: Load data
 **Task** Run the following code to load the data. In the space below, indicate how many rows and columns it has.
-**Answer**
+**Answer** 3822 rows, 4 columns
 
 ```{r}
 baltco_911_calls <- read_csv("data/baltco_911_calls.csv")
@@ -50,8 +50,8 @@ So what does the chart of the top months with the most 911 overdose calls look l
 First, we'll add a month column to our dataframe using lubridate.
 
 ### Task 3: Add a month column to our 911 calls dataframe using lubridate and calculate the number of calls for each month
-**Task** Run the following code to add a month column to our dataframe using lubridate and count the number of calls for each month. In the space below, explain what each step of the code below is doing in English. Note the "label=TRUE" part in the mutate statement.
-**Answer**
+**Task** Run the following code to add a month column to our dataframe using lubridate and count the number of calls for each month. In the space below, explain what each step of the code below is doing in English. Note the "label=TRUE" part in the mutate statement. 
+**Answer** The first line is creating a variable to hold all the code we're writing after it. The second line is creating a new column in this dataframe called month, and it's utilizing the month() function. The label=TRUE provides an abbreviation for each month. The third line groups the data by this new column, the fourth line summarizes the data as the total number of calls during each month, and the fifth line arranges the data from highest to lowest number of calls.
 
 ```{r}
 baltco_911_calls_by_month <- baltco_911_calls %>%
@@ -69,7 +69,7 @@ With ggplot, the first thing we'll always do is draw a blank canvas that will co
 
 ### Task 4: Create an empty ggplot container
 **Task** Run the following code. Explain what you see after running the code in the space below.
-**Answer**
+**Answer** We see a gray box as previously stated.
 
 ```{r}
 baltco_911_calls_by_month %>%
@@ -100,7 +100,7 @@ After we've invoked the ggplot() function, you'll notice we're using a + symbol.
 
 ### Task 5: Run the following code
 **Task** Run the following code. Explain what you see after running the code in the space below.
-**Answer**
+**Answer** We get a bar chart with the months along the x-axis and the number of calls on the y-values.
 
 ```{r}
 baltco_911_calls_by_month %>%
@@ -112,7 +112,7 @@ This is a very basic chart.  But it's hard to derive much meaning from this char
 
 ### Task 6: Run the following code
 **Task** Run the following code. Explain what you see after running the code in the space below. What has changed from the last codeblock?
-**Answer**
+**Answer** The months have been reordered from lowest number of calls to highest number of calls
 
 ```{r}
 baltco_911_calls_by_month %>%
@@ -124,7 +124,7 @@ This is a little more useful. But the bottom is kind of a mess, with overlapping
 
 ### Task 7: Run the following code
 **Task** Run the following code. Explain what you see after running the code in the space below. What has changed from the last codeblock?
-**Answer**
+**Answer** The chart is now a vertical bar chart instead of a horizontal bar chart.
 
 ```{r}
 baltco_911_calls_by_month %>%
@@ -143,7 +143,7 @@ It's kind of like applying CSS to html. Here I'm changing the theme slightly to 
 
 ### Task 8: Run the following code
 **Task** Run the following code. Explain what you see after running the code in the space below. What has changed from the last codeblock?
-**Answer**
+**Answer** The theme has been applied to the chart. The main change is that the background has been changed to be a white grid over a gray grid.
 
 ```{r}
 baltco_911_calls_by_month %>%
@@ -159,7 +159,6 @@ First, you have to install and load a package that contains lots of extra themes
 
 ### Task 9: Run the following code
 **Task** Run the following code. 
-**Answer**
 
 ```{r}
 install.packages('ggthemes')
@@ -170,7 +169,8 @@ And now we'll apply the economist theme from that package with theme_economist()
 
 ### Task 10: Run the following code
 **Task** Run the following code. Explain what you see after running the code in the space below. What has changed from the last version of the chart?
-**Answer**
+**Answer** The chart's theme is different and is now The Economist's theme.
+
 ```{r}
 baltco_911_calls_by_month %>%
   ggplot() +
@@ -178,11 +178,12 @@ baltco_911_calls_by_month %>%
   coord_flip() + 
   theme_economist()
 ```
+
 Those axis titles are kind of a mess. Let's change "count" on the x axis to "total calls" and change "reorder(month,total_calls)" to "month".  And while we're at it, let's add a basic title and a source as a caption. We'll use a new function, labs(), which is short for labels.
 
 ### Task 11: Run the following code
 **Task** Run the following code. Explain what you see after running the code in the space below. What has changed from the last codeblock?
-**Answer**
+**Answer** The chart title, caption and axis labels have been changed.
 
 ```{r}
 baltco_911_calls_by_month %>%
@@ -198,7 +199,7 @@ baltco_911_calls_by_month %>%
     
   )
 ```
-Viola.  Not super pretty, but good enough to show an editor to help them understand the conclusions you reached with your data analysis. 
+Voila.  Not super pretty, but good enough to show an editor to help them understand the conclusions you reached with your data analysis. 
 
 ## Line charts
 
@@ -211,7 +212,7 @@ So, let's use the same Baltimore County data and generate a count of contributio
 ### Task 12: Create a dataframe of contributions by date
 
 **Task** Run the following code. Explain what you see after running the code in the space below. 
-**Answer**
+**Answer** The code groups the data by individual dates and shows the total number of calls under each date.
 
 ```{r}
 
@@ -230,7 +231,7 @@ We'll put the date on the x axis and total contributions on the y axis.
 
 ### Task 13: Run the following code
 **Task** Run the following code. Explain what you see after running the code in the space below. 
-**Answer**
+**Answer** The code below has created a line chart showing the number of calls for every single date in the dataframe.
 
 ```{r}
 baltco_911_calls_by_date %>%
@@ -248,7 +249,7 @@ We'll set the date_breaks to appear for every week; if we wanted every month, we
 
 ### Task 14: Run the following code
 **Task** Run the following code. Explain what you see after running the code in the space below. 
-**Answer**
+**Answer** There's now labels on the x axis for each weekly interval in the dataframe, but the labels all overlap one another.
 
 ```{r}
 baltco_911_calls_by_date %>%
@@ -263,7 +264,8 @@ Those are a little hard to read, so we can turn them 45 degrees to remove the ov
 
 ### Task 15: Run the following code
 **Task** Run the following code. Explain what you see after running the code in the space below. 
-**Answer**
+**Answer** The labels for each week have been shifted so now they're all legible.
+
 ```{r}
 baltco_911_calls_by_date %>%
   ggplot() + 
