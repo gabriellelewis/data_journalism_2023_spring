@@ -1,0 +1,27 @@
+---
+title: "Data Analysis Project"
+author: "Gabrielle Lewis"
+date: "2023-04-11"
+output:
+  html_document:
+    theme: cerulean
+    highlight: pygments
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: false
+---
+
+```{r} {r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load Libraries
+
+```{r}
+options(scipen=999)
+library(tidyverse)
+library(lubridate)
+library(janitor)
+```
+
