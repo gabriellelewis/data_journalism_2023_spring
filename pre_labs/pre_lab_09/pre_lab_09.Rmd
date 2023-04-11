@@ -36,7 +36,7 @@ knitr::include_graphics("images/datawrapper1.png")
 
 ### Task 4: Upload the CSV File
 
-The first thing we'll do is upload the GOP candidates CSV that's in the pre_lab_10/data folder.
+The first thing we'll do is upload the GOP candidates CSV that's in the pre_lab_09/data folder.
 
 **Task** Click on XLS/CSV and upload the md_gop_cands.csv file.
 
@@ -77,7 +77,7 @@ knitr::include_graphics("images/datawrapper5.png")
 
 ### Task 7: Publish the Chart
 
-**Task** Click the "Publish & Embed" tab, then click on the "PNG" icon. Finally, click the "Download image" button and save that file in the pre_lab_10 folder.
+**Task** Click the "Publish & Embed" tab, then click on the "PNG" icon. Finally, click the "Download image" button and save that file in the pre_lab_09 folder.
 
 ```{r, echo=FALSE}
 knitr::include_graphics("images/datawrapper6.png")
@@ -87,6 +87,8 @@ Some publication systems allow for the embedding of HTML into a post or a story.
 
 **Answer** Copy the url of the graphic you published here. It will begin with https://datawrapper.dwcdn.net/. Don't copy the browser's current url.
 
+https://datawrapper.dwcdn.net/4qTnA/1/
+
 ### Task 8: Make a Choropleth Map
 
 Let's create a choropleth map - one that shows variations between the percentage of votes received by Wes Moore across Maryland counties. We'll read that in from the data folder.
@@ -94,7 +96,8 @@ Let's create a choropleth map - one that shows variations between the percentage
 **Task** Run the following code to load the Maryland election results data.
 
 ```{r}
-md_gov_county <- read_csv("data/md_gov_county.csv")
+md_gov_county <- read_csv("data/md_gov_county.csv") %>%
+  clean_names()
 ```
 
 In order to make a map, we need to be able to tell Datawrapper that a certain column contains geographic information (besides the name of the county). The easiest way to do that for U.S. maps is to use something called a [FIPS Code](https://www.census.gov/programs-surveys/geography/guidance/geo-identifiers.html). You should read about them so you understand what they are, and think of them as a unique identifier for some geographical entity like a state or county. Our md_gov_county dataframe has a FIPS code for each county, but if you ever need one for a county, this is a solved problem thanks to the Tigris library that we used in pre_lab 9.
@@ -102,8 +105,10 @@ In order to make a map, we need to be able to tell Datawrapper that a certain co
 **Task** Write code to add columns showing the total number of votes for each county and the percentage of votes received by Wes Moore in each county (you did this in Lab 9!), then replace the CSV file in the data folder with it.
 
 ```{r}
-
 # calculate the total number of votes and Moore's percentage, saving it back to the md_gov_county dataframe
+md_gov_county <- md_gov_county %>%
+  mutate(total_votes = cox + moore + lashar + wallace + harding + write_ins) %>%
+  mutate(pct_moore=moore/total_votes*100)
 
 write_csv(md_gov_county, "data/md_gov_county.csv")
 ```
@@ -128,8 +133,8 @@ knitr::include_graphics("images/datawrapper8.png")
 
 You'll see that the map currently is of the whole nation, and we only have Maryland data. Let's fix that.
 
-**Task** Look for "Hide regions without data" under Appearance, and click the slider icon to enable that feature. You should see a map zoomed into Maryland with some counties in various colors.
-**Answer** Describe the changes from the previous map
+**Task** Look for "Hide regions without data" under Appearance, and click the slider icon to enable that feature. You should see a map zoomed into Maryland with some counties in various colors. Describe the changes from the previous map.
+**Answer**The map now only shows the state of Maryland and its counties.
 
 But it's a little rough visually, so let's clean that up.
 
@@ -137,8 +142,8 @@ But it's a little rough visually, so let's clean that up.
 
 That's better, but check out the tooltip by hovering over a county. It's not super helpful. Let's change the tooltip behavior to show the county name and a better-formatted number.
 
-**Task** Click the "Customize tooltips" button so it expands down. Change {{ fips_code }} to {{ county }} and {{ pctmoore }} to {{ FORMAT(pctmoore, "00.0%")}}
-**Answer** Describe the changes from the previous map
+**Task** Click the "Customize tooltips" button so it expands down. Change {{ fips_code }} to {{ county }} and {{ pctmoore }} to {{ FORMAT(pctmoore, "00.0%")}} Describe the changes from the previous map.
+**Answer** Now when you hover over a county on the map, you see the name of the county rather than the FIPS code and the percentage of vote share Wes Moore had for each jurisdiction.
 
 
 **Task** Add a note that says that this data represents votes counted through Nov. 10 and an alternative description for screen readers. This should be a simple description of what your map shows. Experiment with the "Show labels" button, choosing the "by column" option for Type to display some or all of the county names.
@@ -146,4 +151,4 @@ That's better, but check out the tooltip by hovering over a county. It's not sup
 Ok, that looks better. Let's publish!
 
 **Task** Click the "Proceed" button until you get to the "Publish & Embed" tab, then click "Publish Now". Copy the published URL (like you did for the chart above) and paste it below.
-**Answer** Put the URL of your map here.
+**Answer** https://datawrapper.dwcdn.net/dm8KS/1/
