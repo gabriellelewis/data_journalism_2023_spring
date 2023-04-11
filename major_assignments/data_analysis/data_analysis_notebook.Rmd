@@ -25,3 +25,17 @@ library(lubridate)
 library(janitor)
 ```
 
+## Loading the data, addressing characteristics
+
+**Answer**: The data has 20718 rows and 28 columns upon initially loading it, but the first column simply listed the row numbers, so in actuality there are 27 columns. The column names have also been cleaned up to make data analysis for this project easier. 
+
+One clear limitation with this data is that obviously, it can't have data on every single song but every single artist ever, so this needs to be taken into consideration when analyze the dataframe and creating generalizations. There also isn't a column categorizing each row's genre, so questions asking about songs' genres will need to be slightly readjusted so that it's using data that is actually present. Some songs also have 'NA' values under columns about YouTube videos and views because no YT video exists, so these rows need to be excluded from analysis for questions asking about these columns.
+
+```{r}
+spotify_youtube_data <- read_csv('data/Spotify_Youtube.csv')
+
+spotify_youtube_data <- spotify_youtube_data %>%
+  clean_names() %>%
+  select(-x1)
+```
+
