@@ -20,6 +20,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 # load libraries here
+library(tidyverse)
+library(lubridate)
+library(janitor)
 ```
 
 ## Questions
@@ -37,9 +40,38 @@ You MUST do the following things when answering this question:
 * Publish your chart
 * Describe your thought process below - why you chose to make the chart you did - and add the URL of your chart.
 
-**A1.** 
+**A1.** I selected a range plot chart so that the voting percentages Cox and Hogan gained respectfully for each county were shown side by side, and readers could see the clear differences between their percentages. This type of chart also looks less cluttered compared to a bar chart or column chart and is easier on the eyes. The information will be easier to understand because the visualization isn't overwhelming. 
+
+Here is the URL to the visualization: https://datawrapper.dwcdn.net/kXmNA/5/ 
 
 ```{r}
+md_gov_county <- read_csv('data/md_gov_county.csv') %>%
+  clean_names()
+
+md_2018_gov_county <- read_csv('data/md_gov_county_18.csv') %>%
+  clean_names() %>%
+  rename(writeins_2018=write_ins)
+
+md_combined_gov_county <- md_gov_county %>%
+  inner_join(md_2018_gov_county, by=c(
+    'geoid'='geoid',
+    'county'='county')
+    )
+
+md_combined_gov_county <- md_combined_gov_county %>%
+  mutate(
+    total_2022_votes=cox+moore+lashar+harding+wallace+sefcik+write_ins,
+    total_2018_votes=hogan+jealous+quinn+schlakman+writeins_2018,
+    pct_cox=(cox/total_2022_votes) * 100,
+    pct_hogan=(hogan/total_2018_votes) * 100
+  )
+
+cox_hogan_pct <- md_combined_gov_county %>%
+  select(county, pct_cox, pct_hogan)
+
+write_csv(md_combined_gov_county, "data/md_combined_gov_county.csv")
+
+write_csv(cox_hogan_pct, "data/cox_hogan_pct.csv")
 ```
 
 **Q2.** You're interested in seeing how the methods of voting have changed in Maryland since 2018. Using the `md_votes_by_type.csv` that has data from the top of the ticket (governor in 2018 and 2022, president in 2020), make a chart showing the percentage of votes cast in each category - early voting, election day and mail - over the three years. You'll need to make those percentages in R and then export the CSV using `write_csv`, then make the chart in Datawrapper. Have a title, description and source that tells readers about the data. The title and description should highlight the most newsworthy or important aspect.
@@ -48,11 +80,19 @@ HINT: In Datawrapper's "Check and Describe" tab, you can click on a column to ge
 
 What do you think the story here is? Put the answer below along with the URL of your chart.
 
-**A2.** 
+**A2.** As written on the chart, I think the biggest story here is the dramatic uptick in mail-in votes in the 2020 election and the huge drop in Election Day votes that same year. 2018 and 2022 have more similar trends in terms of the percentage of votes cast, and 2020 stands out because it has very different trends.
+
+URL: https://datawrapper.dwcdn.net/NurVj/1/ 
 
 ```{r}
-```
+md_votes_by_type <- read_csv('data/md_votes_by_type.csv') %>%
+  clean_names()
 
+pct_votes_by_type <- md_votes_by_type %>%
+  select(year, pct_early, pct_election_day, pct_mail)
+
+write_csv(pct_votes_by_type, "data/pct_votes_by_type.csv")
+```
 
 **Q3.** You want to know more about the geography of 911 overdose calls in Montgomery County, Maryland, in 2022. To do that, you'll make a choropleth map in Datawrapper. You will need to:
 
@@ -63,7 +103,23 @@ What do you think the story here is? Put the answer below along with the URL of 
 
 What do you think the story here is, and what would you want to know more about? Put the answer below along with the URL of your map.
 
-**A3.** 
+**A3.** I think the main story here is the fact that the 911 overdose calls seem to be most prevalent in the center of the county, where the zip codes include some of Montomery County's larger cities. In comparison, the less major cities on the outskirts have much lower numbers of overdose calls. I would want to know more about 20874 and the area's demographics and resources, since that county has the highest number of calls.
+
+URL: https://datawrapper.dwcdn.net/c7Qgm/1/
 
 ```{r}
+montgomery_2022_overdoses <- read_csv('data/montgomery_2022_overdoses.csv')
+
+montgomery_2022_overdoses %>%
+  group_by(city) %>%
+  summarise(calls=n())
+
+zip_total_montgomery_2022_overdoses <- montgomery_2022_overdoses %>%
+  group_by(zip) %>%
+  summarise(
+    calls=n()
+  ) %>%
+  mutate(pct_calls=calls/sum(calls)*100)
+
+write_csv(zip_total_montgomery_2022_overdoses, "data/zip_total_moco_overdoses.csv")
 ```
