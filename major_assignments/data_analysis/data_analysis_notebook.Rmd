@@ -31,6 +31,8 @@ library(janitor)
 
 One clear limitation with this data is that obviously, it can't have data on every single song but every single artist ever, so this needs to be taken into consideration when analyze the dataframe and creating generalizations. There also isn't a column categorizing each row's genre, so questions asking about songs' genres will need to be slightly readjusted so that it's using data that is actually present. Some songs also have 'NA' values under columns about YouTube videos and views because no YT video exists, so these rows need to be excluded from analysis for questions asking about these columns.
 
+In order to understand what each column name is referring to for each song, I also needed to reference the page where the dataset could be downloaded from, as this webpage includes definitions for each of the variables in the data. URL: https://www.kaggle.com/datasets/salvatorerastelli/spotify-and-youtube
+
 ```{r}
 spotify_youtube_data <- read_csv('data/Spotify_Youtube.csv')
 
