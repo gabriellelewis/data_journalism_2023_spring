@@ -29,7 +29,7 @@ library(janitor)
 
 **Answer**: The data has 20718 rows and 28 columns upon initially loading it, but the first column simply listed the row numbers, so in actuality there are 27 columns. The column names have also been cleaned up to make data analysis for this project easier. 
 
-One clear limitation with this data is that obviously, it can't have data on every single song but every single artist ever, so this needs to be taken into consideration when analyze the dataframe and creating generalizations. There also isn't a column categorizing each row's genre, so questions asking about songs' genres will need to be slightly readjusted so that it's using data that is actually present. Some songs also have 'NA' values under columns about YouTube videos and views because no YT video exists, so these rows need to be excluded from analysis for questions asking about these columns.
+One clear limitation with this data is that obviously, it can't have data on every single song but every single artist ever, so this needs to be taken into consideration when analyze the dataframe and creating generalizations. There also isn't a column categorizing each row's genre, so questions asking about songs' genres will need to be slightly readjusted so that it's using data that is actually present. Some songs also have 'NA' values under columns about YouTube videos and views because no YT video exists, so these rows need to be excluded from analysis for questions asking about these columns. There are also songs that are entered into the data twice because there were multiple artists featured in the song.
 
 In order to understand what each column name is referring to for each song, I also needed to reference the page where the dataset could be downloaded from, as this webpage includes definitions for each of the variables in the data. URL: https://www.kaggle.com/datasets/salvatorerastelli/spotify-and-youtube
 
@@ -39,5 +39,98 @@ spotify_youtube_data <- read_csv('data/Spotify_Youtube.csv')
 spotify_youtube_data <- spotify_youtube_data %>%
   clean_names() %>%
   select(-x1)
+```
+
+
+### Question 1
+
+* **Question**: Which songs have the highest valence values, and how do they compare to the songs with the highest number of Spotify streams and the highest number of YouTube music video views?
+* **Analysis summary**: In this dataset, valence is defined as the musical positiveness of a track. The top 10 songs with the highest valence values range from 0.98 to 0.99 in terms of their valence. None of the songs with the highest valence values fall into the top 10 songs for either Spotify streams or Youtube music video views. For the top 10 songs with the highest Spotify streams, only 2 out of the the 10 have valence values over 0.9, and for the top 10 songs with the highest of YouTube music video views, 3 out of 10 have valence values over 0.9.
+
+```{r}
+spotify_youtube_data %>%
+  select(track,  valence) %>%
+  arrange(desc(valence))
+
+spotify_youtube_data %>%
+  select(track, stream, valence) %>%
+  arrange(desc(stream))
+
+spotify_youtube_data %>%
+  select(track, views, valence) %>%
+  arrange(desc(views))
+```
+
+### Question 2
+
+* **Question**: Which songs have the highest energy values, and how do they compare to the songs with the highest number of Spotify streams and the highest number of YouTube music video views?
+* **Analysis summary**: In this dataset, energy is defined as the perceptual measure of intensity and activity of a track. The top 10 tracks with the highest energy values have values ranging from 0.99 to the maximum value of 1, and the majority of the tracks seem to be ambient soundtracks such as rain and thunderstorm sounds or background music. Similar to the last question, none of the songs with the highest energy values overlap with the songs with the highest Spotify streams or most Youtube music video views. For the top 10 songs with the highest Spotify streams, the songs' energy levels range from 0.4 up to 0.78, and for the top 10 songs with the highest of YouTube music video views, the songs' energy levels mostly fall between 0.4 up to 0.79. There are a few outliers, where one song "Wheels on the Bus" has a level of 0.38, and "Gangnam Style" has a level of 0.93.
+
+```{r}
+spotify_youtube_data %>%
+  select(track, energy) %>%
+  arrange(desc(energy))
+
+spotify_youtube_data %>%
+  select(track, stream, energy) %>%
+  arrange(desc(stream))
+
+spotify_youtube_data %>%
+  select(track, views, energy) %>%
+  arrange(desc(views))
+```
+
+### Question 3
+
+* **Question**: Which key value has the highest number of Spotify streams, and which has the highest number of YouTube music video streams?
+* **Analysis summary**: The key value of 1, which corresponds to C sharp/D flat, has the highest number of Spotify streams. The key value of 2, which corresponds to D, has the highest number of Youtube music video streams.
+
+```{r}
+spotify_youtube_data %>%
+  group_by(key) %>%
+  summarise(stream) %>%
+  arrange(desc(stream))
+
+spotify_youtube_data %>%
+  group_by(key) %>%
+  summarise(views) %>%
+  arrange(desc(views))
+```
+
+### Question 4
+
+* **Question**: Which artists have the highest valence values, and how do those artists compare to the artists with the most Spotify streams? Or the artists with the most YouTube/music video streams?
+* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+
+```{r}
+spotify_youtube_data %>%
+  group_by(artist) %>%
+  summarise(valence) %>%
+  arrange(desc(valence))
+
+spotify_youtube_data %>%
+  group_by(artist) %>%
+  summarise(stream) %>%
+  arrange(desc(stream))
+
+spotify_youtube_data %>%
+  group_by(artist) %>%
+  summarise(views) %>%
+  arrange(desc(views))
+```
+
+### Question 5
+
+* **Question**: Which songs have the highest and lowest values of danceability, and what are those songs’ number of streams on Spotify and number of YouTube music video streams?
+* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+
+```{r}
+spotify_youtube_data %>%
+  select(track, danceability, stream, views) %>%
+  arrange(desc(danceability))
+
+spotify_youtube_data %>%
+  select(track, danceability, stream, views) %>%
+  arrange(danceability)
 ```
 
