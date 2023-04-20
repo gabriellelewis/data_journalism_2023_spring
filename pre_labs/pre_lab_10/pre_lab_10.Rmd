@@ -194,7 +194,7 @@ Now we can use color to distinguish zip codes from each other. Let's use the num
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
-**Answer** The map below shows the boudaries of Maryland zip codes that are shaded according to the number of foreclosure notices they had in March 2023.
+**Answer** The map below shows the boundaries of Maryland zip codes that are shaded according to the number of foreclosure notices they had in March 2023.
 
 ```{r}
 ggplot() +
