@@ -141,7 +141,7 @@ Let's say we are interested in 2023, so all we need to do now is to store that f
 
 ### Task 5: Save one table from the HTML source
 **Task** Run the following code in the gray-colored codeblock below to extract all tables in the HTML and save it as a dataframe. What do you notice about the columns?
-**Answer** 
+**Answer** The columns have names in regular titlecase with special characters like /, and the date column itself doesn't have the dates written in a way R can recognize.
 
 ```{r}
 # Read in all html from table, store all tables on page as nested list of dataframes.
@@ -165,7 +165,7 @@ Then let's use slice() to remove the last row -- row number 25 -- which contains
 
 ### Task 6: Clean up the data
 **Task** Run the following code to extract the table we want, clean up the names and change the date column to an actual date. Look at the dataframe; what other information about these releases might you want to add?
-**Answer** 
+**Answer** It'd be useful to look at if the release was deleted/removed or not, as well as the office(s) that authored the releases.
 
 ```{r}
 # Read in all html from table, get the HTML table.
@@ -218,8 +218,8 @@ osp_results
 Once again we get a list of two as our result. In this case, we don't want to isolate the first item in our list. Instead, we want to try to locate all of the `li` tags inside this HTML. Since the `li` tag is an HTML element, we use the function `html_elements()` to get them. If we only wanted a single element, we'd use `html_element()`:
 
 ### Task 10: Isolate the list of `li` tags inside the HTML using `html_elements`
-**Task** Run the following code in the gray-colored codeblock below to find the <li> tags. What does the output suggest about how many <ul> tags there are in the HTML source?
-**Answer** 
+**Task** Run the following code in the gray-colored codeblock below to find the <li> tags. What does the output suggest about how many <li> tags there are in the HTML source?
+**Answer** The output pulled all of the 'li' tags from the osp_results variable. The output on my computer doesn't show the full list of all the 'li' elements, but it does suggest there is an immense number.
 
 ```{r}
 osp_results %>% html_elements('li')
@@ -229,7 +229,7 @@ Good news and bad news here: we have all of the <li> tags, but we have lots of t
 
 ### Task 10: Isolate the text of `li` tags inside the HTML using `html_text`
 **Task** Run the following code in the gray-colored codeblock below to find the text inside <li> tags. Describe the output:
-**Answer** 
+**Answer** For each 'li' item, there's now an output of what text is written within that li item.
 
 ```{r}
 osp_results %>% html_elements('li') %>% html_text()
@@ -239,7 +239,7 @@ Ok, so now we can see the press releases. But they are surrounded by a bunch of 
 
 ### Task 11: Turn the contents of the <li> tags into a dataframe
 **Task** Run the following code in the gray-colored codeblock below to make a dataframe. Describe the output:
-**Answer** 
+**Answer** The dataframe now just have one column called "value" with the html_text output for each row, or 'li' item.
 
 ```{r}
 releases <- osp_results %>% html_elements('li') %>% html_text() %>% as_tibble()
