@@ -37,10 +37,15 @@ library(tidyverse)
 ### Tidyverse Tools
 
 Lubridate -> helps working with date-times and time-spans, can mutate columns into dates that R can interpret, can create new columns from data
-  * functions: mdy, ymd, ymd_hms, floor_date (groups all dates into the first one mentioned of a specific month/year), str_squish() to clean up any       extra space, str_replace_all(column name, 'thing to replace', 'replacement'), wday(df$date column, label = TRUE) to get weekday labels from         date column, bind_rows(list(dataframe 1, dataframe 2, etc.)) to combine files with IDENTICAL structures of data, 
-      left_join(added dataframe, by ="column name")
+  * functions: mdy, ymd, ymd_hms, floor_date (groups all dates into the first one mentioned of a specific month/year), str_squish() to
+    clean up any extra space, str_replace_all(column name, 'thing to replace', 'replacement'), wday(df$date column, label = TRUE) to get      weekday labels from date column, bind_rows(list(dataframe 1, dataframe 2, etc.)) and bind_cols(dataframe 1, dataframe 2, etc.)) to 
+    combine files with IDENTICAL structures of data, left_join(added dataframe, by ="column name")
+    
 Janitor -> helps clean up data, can standardize column names (ex. Fiscal Year -> fiscal_year)
   * functions: clean_names(), rename(new name = old name), get_dupes() to find duplicates, distinct() to get rid of ALL duplicates
+  
+Rvest -> webscrape from HTML addresses to get data
+  * functions: read_html() to read html link, html_elements('element'), html_text(), html_table()
 
 ### Codeblock Commands/Functions
 
@@ -52,6 +57,7 @@ problems(variable) -> tells you the issues with a variable
 
 n() -> counts rows of data
 nrow(dataframe name) -> shows # in a certain dataframe
+drop_na(column name) -> drops any rows with NA value
 
 head() -> show first n rows of data
 
