@@ -23,11 +23,12 @@ To do this, we'll need a new library -- [tidytext](https://cran.r-project.org/we
 **Task** Run the following code in the gray-colored codeblock below to load the libraries we'll use.
 
 ```{r}
-#install.packages("tidytext")
+install.packages("tidytext")
 library(tidyverse)
 library(tidytext)
 library(janitor)
 library(lubridate)
+library(rvest)
 ```
 
 Remember the end of the previous lab, where you scraped all of those press release links from Maryland Sen. Ben Cardin's website? We're going to take that one step further and analyze the actual text of those releases using tidytext. Our starting question: what words or phrases appear most in Cardin's press releases?
@@ -38,7 +39,7 @@ Let's read in this data and examine it:
 
 ### Task 2: Read in data
 **Task** Run the following code and describe the dataframe it outputs.
-**Answer**
+**Answer** The variable 'releases' contains a dataframe with four columns: date, title, url, and text.
 
 ```{r}
 releases <- read_rds("data/cardin_releases.rds")
@@ -86,7 +87,7 @@ If you are trying to create a list of unique words, R will treat differences in 
 
 ### Task 5: Trying out unique
 **Task** Run the following code and describe what the `unique` function does to the original list of words.
-**Answer**
+**Answer** This function pulls out all the "unique" terms in a_list_of_words and removes any repeats.
 
 ```{r}
 a_list_of_words <- c("Dog", "dog", "dog", "cat", "cat", ",")
@@ -97,7 +98,7 @@ Fortunately, this is a solved problem with tidytext, which has a function called
 
 ### Task 6: Trying out unnest_tokens
 **Task** Run the following code and describe the output of using the `unnest_tokens` function.
-**Answer**
+**Answer** We get a dataframe of over 647,000 words mentioned in Cardin's press releases.
 
 ```{r}
 unique_words <- releases %>% select(text) %>%
@@ -107,7 +108,7 @@ View(unique_words)
 
 ### Task 7: Make a column chart
 **Task** Run the following code and describe what the resulting graphic shows. Is it interesting?
-**Answer**
+**Answer** Not really - the top 25 words are mostly short articles like "the", "a", "to", etc.
 
 Now we can look at the top words in this dataset. Let's limit ourselves to making a plot of the top 25 words, and we'll use the function `count` to do the counting:
 
@@ -156,7 +157,7 @@ From there, we can get a simple word frequency by just grouping them together an
 
 ### Task 9: Using anti_join
 **Task** Run the following code and describe the results. Is it more interesting than before?
-**Answer**
+**Answer** These results are much more interesting that the previous words dataframe. The words below are unique and pertain to political topics/issues that Cardin mentions in his press releases.
 
 ```{r}
 unique_words %>%
@@ -193,7 +194,7 @@ Then we can create top 10 lists for both of them and compare:
 
 ### Task 11: Create dataframes with the top 10 words in each year
 **Task** Run the following code and describe the results.
-**Answer**
+**Answer** The three dataframes show the top 10 words mentioned in Cardin's press releases during 2021, 2022, and 2023 respectively. Cardin consistently mentions health often during press releases from all 3 years. It's also interesting to note that in 2021, Cardin mentions COVID-19 more, but in the 2022 and 2023 dataframes, COVID-19 doesn't show up in the top 10 words.
 
 ```{r}
 unique_words_2021 %>%
@@ -238,7 +239,7 @@ So this block is is going to do the following:
 
 ### Task 12: Create a dataframe with the top 10 two-word phrases for 2021
 **Task** Run the following code and describe the results.
-**Answer**
+**Answer** The results show the top two-word phrases in 2021 press releases. The top phrase is COVID-19. Other top phrases pertain to public health and healthcare.
 
 ```{r}
 releases %>%
@@ -258,7 +259,7 @@ And we already have a different, more nuanced result. Health was among the top s
 
 ### Task 13: Create a dataframe with the top 10 two-word phrases for 2022
 **Task** Run the following code and describe the results.
-**Answer**
+**Answer** In this dataframe for the top two-word phrases for 2022, COVID-19 is lower on the list. The top phrase is "project location," and other phrases include locations within the state such as Baltimore City.
 
 ```{r}
 releases %>%
@@ -278,7 +279,7 @@ And 2023?
 
 ### Task 14: Create a dataframe with the top 10 two-word phrases for 2023
 **Task** Run the following code and describe the results.
-**Answer**
+**Answer** This top 10 list of two-word phrases in 2023 is much more different compared to the 2021 and 2022 lists. The top phrases in this list include "human rights", "equal rights", and "health care".
 
 ```{r}
 releases %>%
@@ -304,7 +305,7 @@ Another popular use of text analysis is to measure the sentiment of a word - whe
 
 ### Task 15: Load the bing lexicon and produce sentiments for our 2021-2023 unique words
 **Task** Run the following code and describe the results. Do any of the sentiments seem incorrect or counter-intuitive?
-**Answer**
+**Answer** These words alone seem to have correct sentiments, but the words are also taken out of context. For example, in the 2023 bing words dataframe, "supreme" has a positive sentiment — but it's possible Cardin could be actually criticizing the Supreme Court if that's how the word is being used.
 
 ```{r}
 bing <- get_sentiments("bing")
