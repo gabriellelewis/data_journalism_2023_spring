@@ -44,40 +44,82 @@ spotify_youtube_data <- spotify_youtube_data %>%
 
 ### Question 1
 
-* **Question**: Which songs have the highest valence values, and how do they compare to the songs with the highest number of Spotify streams and the highest number of YouTube music video views?
-* **Analysis summary**: In this dataset, valence is defined as the musical positiveness of a track. The top 10 songs with the highest valence values range from 0.98 to 0.99 in terms of their valence. None of the songs with the highest valence values fall into the top 10 songs for either Spotify streams or Youtube music video views. For the top 10 songs with the highest Spotify streams, only 2 out of the the 10 have valence values over 0.9, and for the top 10 songs with the highest of YouTube music video views, 3 out of 10 have valence values over 0.9.
+* **Question**: What is the average valence value for songs in the highest quartile of this data, and how does this value  compare to the average valence value for songs in the highest quartile of the number of Spotify streams and for songs in the highest quartile of the highest number of YouTube music video views?
+* **Analysis summary**: In this dataset, valence is defined as the musical positiveness of a track. When looking at the highest quartile for valence values for the entire dataset, the mean valence value is about 0.84. This average value is considerably higher than the mean valence values for the respective highest quartiles for most Spotify streams and most YouTube music video views. For the quartile for songs with the most streams, the mean valence value is about 0.52, and for the quartile for songs with the most views, the mean valence value is about 0.55. It makes sense that the streams and views quartiles have similar average values because they consistent of the most popular songs.
 
 ```{r}
-spotify_youtube_data %>%
-  select(track,  valence) %>%
-  arrange(desc(valence))
+summary(spotify_youtube_data)
 
+# all data average
 spotify_youtube_data %>%
-  select(track, stream, valence) %>%
-  arrange(desc(stream))
+  filter(valence>0.7262) %>%
+  summarise(
+    mean_valence=mean(valence)
+  )
 
+# stream average
 spotify_youtube_data %>%
-  select(track, views, valence) %>%
-  arrange(desc(views))
+  filter(stream>138358065, !is.na(valence)) %>%
+  summarise(
+    mean_valence=mean(valence)
+  )
+
+# views average
+spotify_youtube_data %>%
+  filter(views>70399749) %>%
+  summarise(
+    mean_valence=mean(valence)
+  )
+
 ```
 
 ### Question 2
 
-* **Question**: Which songs have the highest energy values, and how do they compare to the songs with the highest number of Spotify streams and the highest number of YouTube music video views?
-* **Analysis summary**: In this dataset, energy is defined as the perceptual measure of intensity and activity of a track. The top 10 tracks with the highest energy values have values ranging from 0.99 to the maximum value of 1, and the majority of the tracks seem to be ambient soundtracks such as rain and thunderstorm sounds or background music. Similar to the last question, none of the songs with the highest energy values overlap with the songs with the highest Spotify streams or most Youtube music video views. For the top 10 songs with the highest Spotify streams, the songs' energy levels range from 0.4 up to 0.78, and for the top 10 songs with the highest of YouTube music video views, the songs' energy levels mostly fall between 0.4 up to 0.79. There are a few outliers, where one song "Wheels on the Bus" has a level of 0.38, and "Gangnam Style" has a level of 0.93.
+* **Question**: What is the average energy value for songs in the highest quartile of this data? How many songs within the highest quartile of songs with the most Spotify streams have energy values above this average? How many songs within the highest quartile of songs with the most YouTube music video views have energy values over this average?
+* **Analysis summary**: In this dataset, energy is defined as the perceptual measure of intensity and activity of a track. The average energy value for the songs in the highest energy quartile out of the entire dataset is about 0.88. Only about 10% of the songs out of the highest quartile for Spotify streams had energy values above this mean value. For songs out of the highest quartile for YouTube music views, only about 11% had energy values over this mean value.
 
 ```{r}
+summary(spotify_youtube_data)
+
+# all data average
 spotify_youtube_data %>%
-  select(track, energy) %>%
-  arrange(desc(energy))
+  filter(energy>0.7980000) %>%
+  summarise(
+    mean_energy=mean(energy)
+  )
+
+# total songs in highest streams and values quartiles
+spotify_youtube_data %>%
+  filter(stream>138358065) %>%
+  summarise(
+    total_songs=n()
+  )
 
 spotify_youtube_data %>%
-  select(track, stream, energy) %>%
-  arrange(desc(stream))
+  filter(views>70399749) %>%
+  summarise(
+    total_songs=n()
+  )
 
+# stream average
 spotify_youtube_data %>%
-  select(track, views, energy) %>%
-  arrange(desc(views))
+  filter(stream>138358065, energy>0.8791244) %>%
+  summarise(
+    total_energy_songs=n()
+  ) %>%
+  mutate(
+    pct_energy_songs=total_energy_songs/5036*100
+  )
+
+# views average
+spotify_youtube_data %>%
+  filter(views>70399749, energy>0.8791244) %>%
+  summarise(
+    total_energy_songs=n()
+  ) %>%
+  mutate(
+    pct_energy_songs=total_energy_songs/5061*100
+  )
 ```
 
 ### Question 3
@@ -99,24 +141,14 @@ spotify_youtube_data %>%
 
 ### Question 4
 
-* **Question**: Which artists have the highest valence values, and how do those artists compare to the artists with the most Spotify streams? Or the artists with the most YouTube/music video streams?
+* **Question**: Which artists have valence values above the average valence value for the entire dataset, and what percentage of artists out of everyone in the dataset have data values about this average value? How many artists in the highest quartile of Spotify streams have valence values over the average? How many artists in the highest quartile of YouTube music video views?
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
 
 ```{r}
-spotify_youtube_data %>%
+spotify_youtube_data %>%  
+  filter(valence>0.7262) %>%
   group_by(artist) %>%
-  summarise(valence) %>%
-  arrange(desc(valence))
-
-spotify_youtube_data %>%
-  group_by(artist) %>%
-  summarise(stream) %>%
-  arrange(desc(stream))
-
-spotify_youtube_data %>%
-  group_by(artist) %>%
-  summarise(views) %>%
-  arrange(desc(views))
+  summarise(valence)
 ```
 
 ### Question 5

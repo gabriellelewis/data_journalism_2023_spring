@@ -76,7 +76,7 @@ col_names = FALSE -> if R reads a row of data as column names, this tells them t
 
 ### Filters vs. Selections
 
-filter(name == "value") is for ROWS; create a new variable to hold the subset you're picking out
+filter(name == "value") is for ROWS; create a new variable to hold the subset you're picking out; filter(!is.na(column_name)) to filter out NA values
 select() is for COLUMNS
 
 ### Abbreviations/Meanings
