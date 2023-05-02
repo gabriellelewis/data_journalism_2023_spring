@@ -52,21 +52,21 @@ summary(spotify_youtube_data)
 
 # all data average
 spotify_youtube_data %>%
-  filter(valence>0.7262) %>%
+  filter(valence>=0.7262) %>%
   summarise(
     mean_valence=mean(valence)
   )
 
 # stream average
 spotify_youtube_data %>%
-  filter(stream>138358065, !is.na(valence)) %>%
+  filter(stream>=138358065, !is.na(valence)) %>%
   summarise(
     mean_valence=mean(valence)
   )
 
 # views average
 spotify_youtube_data %>%
-  filter(views>70399749) %>%
+  filter(views>=70399749) %>%
   summarise(
     mean_valence=mean(valence)
   )
@@ -76,34 +76,34 @@ spotify_youtube_data %>%
 ### Question 2
 
 * **Question**: What is the average energy value for songs in the highest quartile of this data? How many songs within the highest quartile of songs with the most Spotify streams have energy values above this average? How many songs within the highest quartile of songs with the most YouTube music video views have energy values over this average?
-* **Analysis summary**: In this dataset, energy is defined as the perceptual measure of intensity and activity of a track. The average energy value for the songs in the highest energy quartile out of the entire dataset is about 0.88. Only about 10% of the songs out of the highest quartile for Spotify streams had energy values above this mean value. For songs out of the highest quartile for YouTube music views, only about 11% had energy values over this mean value.
+* **Analysis summary**: In this dataset, energy is defined as the perceptual measure of intensity and activity of a track. The average energy value for the songs in the highest energy quartile out of the entire dataset is about 0.88. Only about 10% of the songs out of the highest quartile for Spotify streams had energy values above this mean value. For songs out of the highest quartile for YouTube music views, only about 12% had energy values over this mean value.
 
 ```{r}
 summary(spotify_youtube_data)
 
 # all data average
 spotify_youtube_data %>%
-  filter(energy>0.7980000) %>%
+  filter(energy>=0.7980000) %>%
   summarise(
     mean_energy=mean(energy)
   )
 
 # total songs in highest streams and values quartiles
 spotify_youtube_data %>%
-  filter(stream>138358065) %>%
+  filter(stream>=138358065) %>%
   summarise(
     total_songs=n()
   )
 
 spotify_youtube_data %>%
-  filter(views>70399749) %>%
+  filter(views>=70399749) %>%
   summarise(
     total_songs=n()
   )
 
 # stream average
 spotify_youtube_data %>%
-  filter(stream>138358065, energy>0.8791244) %>%
+  filter(stream>=138358065, energy>=0.8791244) %>%
   summarise(
     total_energy_songs=n()
   ) %>%
@@ -113,7 +113,7 @@ spotify_youtube_data %>%
 
 # views average
 spotify_youtube_data %>%
-  filter(views>70399749, energy>0.8791244) %>%
+  filter(views>=70399749, energy>=0.8791244) %>%
   summarise(
     total_energy_songs=n()
   ) %>%
@@ -122,47 +122,94 @@ spotify_youtube_data %>%
   )
 ```
 
-### Question 3
+### Question 3 
 
-* **Question**: Which key value has the highest number of Spotify streams, and which has the highest number of YouTube music video streams?
-* **Analysis summary**: The key value of 1, which corresponds to C sharp/D flat, has the highest number of Spotify streams. The key value of 2, which corresponds to D, has the highest number of Youtube music video streams.
+* **Question**: Which key shows up the most in the dataset, and how large of a percentage is the most frequent key out of the entire dataset? Which key shows up the most in the highest quartile for Spotify streams and highest quartile for YouTube music video views?
+* **Analysis summary**: The key value of 0, which corresponds to C, appears the most in this dataset, and songs in this key make up about 11% of the total number of rows of the data. The key value of 1, which corresponds to C sharp/D flat, appears the most in both the highest quartile for Spotify streams and highest quartile for YouTube music video views.
 
 ```{r}
 spotify_youtube_data %>%
   group_by(key) %>%
-  summarise(stream) %>%
-  arrange(desc(stream))
+  summarise(total_occurrences=n()) %>%
+  arrange(desc(total_occurrences)) %>%
+  mutate(pct_occurrences=total_occurrences/20718 * 100)
 
 spotify_youtube_data %>%
+  filter(stream>=138358065) %>%
   group_by(key) %>%
-  summarise(views) %>%
-  arrange(desc(views))
+  summarise(total_stream_occurrences=n()) %>%
+  arrange(desc(total_stream_occurrences))
+
+spotify_youtube_data %>%
+  filter(views>=70399749) %>%
+  group_by(key) %>%
+  summarise(total_views_occurrences=n()) %>%
+  arrange(desc(total_views_occurrences))
+
 ```
 
 ### Question 4
 
-* **Question**: Which artists have valence values above the average valence value for the entire dataset, and what percentage of artists out of everyone in the dataset have data values about this average value? How many artists in the highest quartile of Spotify streams have valence values over the average? How many artists in the highest quartile of YouTube music video views?
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+* **Question**: What percentage of artists out of everyone in the dataset have valence values above the average value for the entire dataset? How many artists in the highest quartile of Spotify streams have valence values over the average? How many artists in the highest quartile of YouTube music video views?
+* **Analysis summary**: There's a total of 2079 artists in this dataset. Out of this number, about 52% have valence values above the average valence value in the highest quartile for that specific factor. About 17% of artists above the average stream value in the highest stream quartile have a valence value over the average value. For YouTube music video views, that number is about 18.6%.
 
 ```{r}
-spotify_youtube_data %>%  
-  filter(valence>0.7262) %>%
+spotify_youtube_data %>%
   group_by(artist) %>%
-  summarise(valence)
+  summarise(count=n())
+
+spotify_youtube_data %>%  
+  filter(valence>=0.8423617) %>%
+  group_by(artist) %>%
+  summarise(count=n())
+
+spotify_youtube_data %>%  
+  filter(valence>=0.8423617, stream>=138358065) %>%
+  group_by(artist) %>%
+  summarise(count=n())
+
+spotify_youtube_data %>%  
+  filter(valence>=0.8423617, views>=70399749) %>%
+  group_by(artist) %>%
+  summarise(count=n())
+
+# pct of all artists
+1079/2079 * 100
+# pct of top streamed artists
+357/2079 * 100
+# pct of top viewed artists
+387/2079 * 100
 ```
 
 ### Question 5
 
-* **Question**: Which songs have the highest and lowest values of danceability, and what are those songs’ number of streams on Spotify and number of YouTube music video streams?
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+* **Question**: What is the average danceability value for songs in the highest and lowest quartiles of this data? How does the average danceability value for songs in the highest Spotify streams quartile compare to these values? How about the average danceability value for the songs in the highest YouTube music video views quartile?
+* **Analysis summary**: For songs in the highest and lowest quartiles of the dataset, the average danceability values respectively are about 0.81= and 0.4. For the highest Spotify streams quartile, the average danceability value is about 0.64. For the highest YouTube music video views quartile, the value is about 0.65.
 
 ```{r}
+summary(spotify_youtube_data)
+
+# calculating quartile averages
 spotify_youtube_data %>%
-  select(track, danceability, stream, views) %>%
-  arrange(desc(danceability))
+  filter(danceability>=0.7402) %>%
+  summarise(
+    mean_high_danceability=mean(danceability)
+  )
 
 spotify_youtube_data %>%
-  select(track, danceability, stream, views) %>%
-  arrange(danceability)
+  filter(0.5180>=danceability) %>%
+  summarise(
+    mean_low_danceability=mean(danceability)
+  )
+
+# calculating for spotify and youtube quartiles
+spotify_youtube_data %>%
+  filter(stream>=138358065, !is.na(danceability)) %>%
+  summarise(mean_stream_danceability=mean(danceability))
+
+spotify_youtube_data %>%
+  filter(views>=70399749) %>%
+  summarise(mean_views_danceability=mean(danceability))
+
 ```
 
