@@ -94,13 +94,13 @@ spotify_youtube_data %>%
 spotify_youtube_data %>%
   filter(stream>=138358065) %>%
   summarise(
-    total_songs=n()
+    total_stream_songs=n()
   )
 
 spotify_youtube_data %>%
   filter(views>=70399749) %>%
   summarise(
-    total_songs=n()
+    total_views_songs=n()
   )
 
 # stream average
@@ -140,13 +140,15 @@ spotify_youtube_data %>%
   filter(stream>=138358065) %>%
   group_by(key) %>%
   summarise(total_stream_occurrences=n()) %>%
-  arrange(desc(total_stream_occurrences))
+  arrange(desc(total_stream_occurrences)) %>%
+  mutate(pct_occurrences=total_stream_occurrences/5036 * 100)
 
 spotify_youtube_data %>%
   filter(views>=70399749) %>%
   group_by(key) %>%
   summarise(total_views_occurrences=n()) %>%
-  arrange(desc(total_views_occurrences))
+  arrange(desc(total_views_occurrences)) %>%
+  mutate(pct_occurrences=total_views_occurrences/5063 * 100)
 
 ```
 
