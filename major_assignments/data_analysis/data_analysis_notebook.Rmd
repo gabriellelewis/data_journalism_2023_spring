@@ -12,6 +12,8 @@ output:
       smooth_scroll: false
 ---
 
+[memo intro]
+
 ```{r} {r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
