@@ -12,8 +12,6 @@ output:
       smooth_scroll: false
 ---
 
-[memo intro]
-
 ```{r} {r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -26,8 +24,11 @@ library(tidyverse)
 library(lubridate)
 library(janitor)
 ```
+## MEMO INTRO
 
-## Loading the data, addressing characteristics
+
+
+## Addressing the data's characteristics and limitations
 
 **Answer**: The data has 20718 rows and 28 columns upon initially loading it, but the first column simply listed the row numbers, so in actuality there are 27 columns. The column names have also been cleaned up to make data analysis for this project easier. 
 
@@ -73,16 +74,15 @@ spotify_youtube_data %>%
     mean_valence=mean(valence)
   )
 
+knitr::include_graphics(rep("images/average_valence_values_q1.png"))
 ```
 
 ### Question 2
 
-* **Question**: What is the average energy value for songs in the highest quartile of this data? How many songs within the highest quartile of songs with the most Spotify streams have energy values above this average? How many songs within the highest quartile of songs with the most YouTube music video views have energy values over this average?
+* **Question**: What is the average energy value for songs in the highest quartile of this data? How many songs within the highest quartile of songs with the most Spotify streams have energy values above or below this average? How many songs within the highest quartile of songs with the most YouTube music video views have energy values over or under this average?
 * **Analysis summary**: In this dataset, energy is defined as the perceptual measure of intensity and activity of a track. The average energy value for the songs in the highest energy quartile out of the entire dataset is about 0.88. Only about 10% of the songs out of the highest quartile for Spotify streams had energy values above this mean value. For songs out of the highest quartile for YouTube music views, only about 12% had energy values over this mean value.
 
 ```{r}
-summary(spotify_youtube_data)
-
 # all data average
 spotify_youtube_data %>%
   filter(energy>=0.7980000) %>%
@@ -107,35 +107,49 @@ spotify_youtube_data %>%
 spotify_youtube_data %>%
   filter(stream>=138358065, energy>=0.8791244) %>%
   summarise(
-    total_energy_songs=n()
+    total_high_energy_songs_streams=n()
   ) %>%
   mutate(
-    pct_energy_songs=total_energy_songs/5036*100
+    pct_energy_songs_streams=total_high_energy_songs_streams/5036*100
+  )
+
+spotify_youtube_data %>%
+  filter(stream>=138358065, energy<0.8791244) %>%
+  summarise(
+    total_low_energy_songs_streams=n()
+  ) %>%
+  mutate(
+    pct_energy_songs=total_low_energy_songs_streams/5036*100
   )
 
 # views average
 spotify_youtube_data %>%
   filter(views>=70399749, energy>=0.8791244) %>%
   summarise(
-    total_energy_songs=n()
+    total_high_energy_songs_views=n()
   ) %>%
   mutate(
-    pct_energy_songs=total_energy_songs/5061*100
+    pct_energy_songs_views=total_high_energy_songs_views/5061*100
   )
+
+spotify_youtube_data %>%
+  filter(views>=70399749, energy<0.8791244) %>%
+  summarise(
+    total_low_energy_songs_views=n()
+  ) %>%
+  mutate(
+    pct_energy_songs_views=total_low_energy_songs_views/5061*100
+  )
+
+knitr::include_graphics(rep("images/energy_values_q2.png"))
 ```
 
 ### Question 3 
 
-* **Question**: Which key shows up the most in the dataset, and how large of a percentage is the most frequent key out of the entire dataset? Which key shows up the most in the highest quartile for Spotify streams and highest quartile for YouTube music video views?
-* **Analysis summary**: The key value of 0, which corresponds to C, appears the most in this dataset, and songs in this key make up about 11% of the total number of rows of the data. The key value of 1, which corresponds to C sharp/D flat, appears the most in both the highest quartile for Spotify streams and highest quartile for YouTube music video views.
+* **Question**: Which key shows up the most in the highest quartile for Spotify streams and highest quartile for YouTube music video views?
+* **Analysis summary**: The key value of 1, which corresponds to C sharp/D flat, appears the most in both the highest quartile for Spotify streams and highest quartile for YouTube music video views.
 
 ```{r}
-spotify_youtube_data %>%
-  group_by(key) %>%
-  summarise(total_occurrences=n()) %>%
-  arrange(desc(total_occurrences)) %>%
-  mutate(pct_occurrences=total_occurrences/20718 * 100)
-
 spotify_youtube_data %>%
   filter(stream>=138358065) %>%
   group_by(key) %>%
@@ -150,6 +164,7 @@ spotify_youtube_data %>%
   arrange(desc(total_views_occurrences)) %>%
   mutate(pct_occurrences=total_views_occurrences/5063 * 100)
 
+knitr::include_graphics(rep("images/keys_q3.png"))
 ```
 
 ### Question 4
@@ -187,8 +202,8 @@ spotify_youtube_data %>%
 
 ### Question 5
 
-* **Question**: What is the average danceability value for songs in the highest and lowest quartiles of this data? How does the average danceability value for songs in the highest Spotify streams quartile compare to these values? How about the average danceability value for the songs in the highest YouTube music video views quartile?
-* **Analysis summary**: For songs in the highest and lowest quartiles of the dataset, the average danceability values respectively are about 0.81= and 0.4. For the highest Spotify streams quartile, the average danceability value is about 0.64. For the highest YouTube music video views quartile, the value is about 0.65.
+* **Question**: What is the average danceability value for songs in the highest and lowest quartiles of this data? How many songs with the most Spotify streams had danceability values above the highest quartile average or below the lowest quartile average? How many songs with the most YouTube music video views had danceability values above the highest quartile average or below the lowest quartile average? 
+* **Analysis summary**: For songs in the highest and lowest quartiles of the dataset, the average danceability values respectively are about 0.81 and 0.4. 
 
 ```{r}
 summary(spotify_youtube_data)
@@ -208,12 +223,32 @@ spotify_youtube_data %>%
 
 # calculating for spotify and youtube quartiles
 spotify_youtube_data %>%
-  filter(stream>=138358065, !is.na(danceability)) %>%
-  summarise(mean_stream_danceability=mean(danceability))
+  filter(stream>=138358065, danceability<=0.7402) %>%
+  summarise(total_high_streams_songs=n()) %>%
+  mutate(
+    pct_dance_songs_streams=total_high_streams_songs/5036*100
+  )
 
 spotify_youtube_data %>%
-  filter(views>=70399749) %>%
-  summarise(mean_views_danceability=mean(danceability))
+  filter(stream>=138358065, danceability>=0.5180) %>%
+  summarise(total_low_streams_songs=n()) %>%
+  mutate(
+    pct_dance_songs_streams=total_low_streams_songs/5036*100
+  )
 
+
+spotify_youtube_data %>%
+  filter(views>=70399749, danceability<=0.7402) %>%
+  summarise(total_high_views_songs=n()) %>%
+  mutate(
+    pct_dance_songs_views=total_high_views_songs/5061*100
+  )
+
+spotify_youtube_data %>%
+  filter(views>=70399749, danceability>=0.5180) %>%
+  summarise(total_low_views_songs=n()) %>%
+  mutate(
+    pct_dance_songs_views=total_low_views_songs/5061*100
+  )
 ```
 
