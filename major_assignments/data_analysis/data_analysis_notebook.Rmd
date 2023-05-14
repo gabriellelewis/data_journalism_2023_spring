@@ -32,7 +32,7 @@ library(janitor)
 
 **Answer**: The data has 20718 rows and 28 columns upon initially loading it, but the first column simply listed the row numbers, so in actuality there are 27 columns. The column names have also been cleaned up to make data analysis for this project easier. 
 
-One clear limitation with this data is that obviously, it can't have data on every single song but every single artist ever, so this needs to be taken into consideration when analyze the dataframe and creating generalizations. There also isn't a column categorizing each row's genre, so questions asking about songs' genres will need to be slightly readjusted so that it's using data that is actually present. Some songs also have 'NA' values under columns about YouTube videos and views because no YT video exists, so these rows need to be excluded from analysis for questions asking about these columns. There are also songs that are entered into the data twice because there were multiple artists featured in the song.
+One clear limitation with this data is that, obviously, it can't have data on every single song but every single artist ever, so this needs to be taken into consideration when analyze the dataframe and creating generalizations. There also isn't a column categorizing each row's genre, so questions asking about songs' genres will need to be slightly readjusted so that it's using data that is actually present. Some songs also have 'NA' values under columns about YouTube videos and views because no YT video exists, so these rows need to be excluded from analysis for questions asking about these columns. There are also songs that are entered into the data twice because there were multiple artists featured in the song.
 
 In order to understand what each column name is referring to for each song, I also needed to reference the page where the dataset could be downloaded from, as this webpage includes definitions for each of the variables in the data. URL: https://www.kaggle.com/datasets/salvatorerastelli/spotify-and-youtube
 
@@ -206,8 +206,6 @@ spotify_youtube_data %>%
 * **Analysis summary**: For songs in the highest and lowest quartiles of the dataset, the average danceability values respectively are about 0.81 and 0.4. 
 
 ```{r}
-summary(spotify_youtube_data)
-
 # calculating quartile averages
 spotify_youtube_data %>%
   filter(danceability>=0.7402) %>%
@@ -223,14 +221,14 @@ spotify_youtube_data %>%
 
 # calculating for spotify and youtube quartiles
 spotify_youtube_data %>%
-  filter(stream>=138358065, danceability<=0.7402) %>%
+  filter(stream>=138358065, danceability>=0.7402) %>%
   summarise(total_high_streams_songs=n()) %>%
   mutate(
     pct_dance_songs_streams=total_high_streams_songs/5036*100
   )
 
 spotify_youtube_data %>%
-  filter(stream>=138358065, danceability>=0.5180) %>%
+  filter(stream>=138358065, danceability<=0.5180) %>%
   summarise(total_low_streams_songs=n()) %>%
   mutate(
     pct_dance_songs_streams=total_low_streams_songs/5036*100
@@ -238,14 +236,14 @@ spotify_youtube_data %>%
 
 
 spotify_youtube_data %>%
-  filter(views>=70399749, danceability<=0.7402) %>%
+  filter(views>=70399749, danceability>=0.7402) %>%
   summarise(total_high_views_songs=n()) %>%
   mutate(
     pct_dance_songs_views=total_high_views_songs/5061*100
   )
 
 spotify_youtube_data %>%
-  filter(views>=70399749, danceability>=0.5180) %>%
+  filter(views>=70399749, danceability<=0.5180) %>%
   summarise(total_low_views_songs=n()) %>%
   mutate(
     pct_dance_songs_views=total_low_views_songs/5061*100
