@@ -24,17 +24,19 @@ library(tidyverse)
 library(lubridate)
 library(janitor)
 ```
-## MEMO INTRO
+## INTRODUCTION
 
+When I think about what the most popular songs are like, I personally would think the top pop songs are generally upbeat, positive, lively and easy to dance to. These were the assumptions I carried into this data analysis project. When I saw songs could have assigned values to them corresponding to energy, positivity, danceability and more, I wanted to ask the question: What do the most popular songs have in common, and do they confirm what I would assume would make a song a streaming and viewing hit? 
 
+Coming out of this analysis project, I can say that my findings show the most popular songs don't hit the most extreme values of positivity, energy or danceability. If anything, the actual values for these metrics majority of the most streamed and viewed songs lie closer to the middle of the range. I asked questions of a dataset of almost 21,000 songs and tried to assess what the most streamed and viewed songs shared and where they differed. 
 
-## Addressing the data's characteristics and limitations
+### Addressing the data's characteristics and limitations
 
-**Answer**: The data has 20718 rows and 28 columns upon initially loading it, but the first column simply listed the row numbers, so in actuality there are 27 columns. The column names have also been cleaned up to make data analysis for this project easier. 
+The data [https://www.kaggle.com/datasets/salvatorerastelli/spotify-and-youtube] has 20718 rows and 28 columns upon initially loading it, but the first column simply listed the row numbers, so in actuality there are 27 columns. The column names have also been cleaned up to make data analysis for this project easier, and the first column has been removed. In order to understand what each column name is referring to for each song, I also needed to reference the page where the dataset could be downloaded from, as this webpage includes definitions for each of the variables in the data.
 
-One clear limitation with this data is that, obviously, it can't have data on every single song but every single artist ever, so this needs to be taken into consideration when analyze the dataframe and creating generalizations. There also isn't a column categorizing each row's genre, so questions asking about songs' genres will need to be slightly readjusted so that it's using data that is actually present. Some songs also have 'NA' values under columns about YouTube videos and views because no YT video exists, so these rows need to be excluded from analysis for questions asking about these columns. There are also songs that are entered into the data twice because there were multiple artists featured in the song.
+The data's strengths include the sheer size of the dataset and the diversity of the songs included. While there's songs that I can recognize as chart-toppers, there's also songs from video game soundtracks and songs that are actually just instrumentals and ambient noises. Having this range of types of songs illustrates this data isn't only confined to songs of certain characteristics, such as songs that have to have lyrics.
 
-In order to understand what each column name is referring to for each song, I also needed to reference the page where the dataset could be downloaded from, as this webpage includes definitions for each of the variables in the data. URL: https://www.kaggle.com/datasets/salvatorerastelli/spotify-and-youtube
+One clear limitation with this data is that, obviously, it can't have data on every single song but every single artist ever, so this needs to be taken into consideration when analyze the dataframe and creating generalizations. Some songs also have 'NA' values under columns about YouTube videos and views because no video exists, so these rows need to be excluded from analysis for questions asking about these columns. There are also songs that are entered into the data twice because there were multiple artists featured in the song. Another limitation the data's authors noted on their website is that the data is "heavily dependent" on the time it was collected, which was February 7, 2023.
 
 ```{r}
 spotify_youtube_data <- read_csv('data/Spotify_Youtube.csv')
@@ -43,12 +45,17 @@ spotify_youtube_data <- spotify_youtube_data %>%
   clean_names() %>%
   select(-x1)
 ```
+## QUESTIONS
 
+To preface, the majority of these questions look at quartiles of the data, or subsets of it. Songs with the most streams refer to the data within the highest quartile of Spotify streams, AKA the songs had at least 138,358,065 streams or more. Songs with the most music video views refer to data within the highest quartile of views, AKA the songs' videos had at least 70,399,749 views or more.
 
 ### Question 1
 
-* **Question**: What is the average valence value for songs in the highest quartile of this data, and how does this value  compare to the average valence value for songs in the highest quartile of the number of Spotify streams and for songs in the highest quartile of the highest number of YouTube music video views?
-* **Analysis summary**: In this dataset, valence is defined as the musical positiveness of a track. When looking at the highest quartile for valence values for the entire dataset, the mean valence value is about 0.84. This average value is considerably higher than the mean valence values for the respective highest quartiles for most Spotify streams and most YouTube music video views. For the quartile for songs with the most streams, the mean valence value is about 0.52, and for the quartile for songs with the most views, the mean valence value is about 0.55. It makes sense that the streams and views quartiles have similar average values because they consistent of the most popular songs.
+* **Question**: What is the average valence value for songs in the highest quartile of this data, and how does this value compare to the average valence value for songs in the highest quartile of the number of Spotify streams and for songs in the highest quartile of the highest number of YouTube music video views?
+
+* **Analysis summary**: In this dataset, valence is defined as the musical positiveness of a track. Songs were ranked on a scale of 0 to 1 for their valence values, with 1 being the highest value. 
+
+When looking at the highest quartile for valence values for the entire dataset, the mean valence value is about 0.84. This average value is considerably higher than the mean valence values for songs with the most streams and songs with the most views. For songs with the most streams, the mean valence value is about 0.52, and for the quartile for songs with the most views, the mean valence value is about 0.55. It makes sense that the streams and views quartiles have similar average values because they consist of the most popular songs, but on the scale of 0 to 1 for valence, these values are pretty much right in the middle.
 
 ```{r}
 summary(spotify_youtube_data)
@@ -79,11 +86,14 @@ knitr::include_graphics(rep("images/average_valence_values_q1.png"))
 
 ### Question 2
 
-* **Question**: What is the average energy value for songs in the highest quartile of this data? How many songs within the highest quartile of songs with the most Spotify streams have energy values above or below this average? How many songs within the highest quartile of songs with the most YouTube music video views have energy values over or under this average?
-* **Analysis summary**: In this dataset, energy is defined as the perceptual measure of intensity and activity of a track. The average energy value for the songs in the highest energy quartile out of the entire dataset is about 0.88. Only about 10% of the songs out of the highest quartile for Spotify streams had energy values above this mean value. For songs out of the highest quartile for YouTube music views, only about 12% had energy values over this mean value.
+* **Question**: What is the average energy value for songs in the highest quartile of this data? How many songs with the most streams have energy values above or below this average? How many songs with the most YouTube music video views have energy values over or under this average?
+
+* **Analysis summary**: In this dataset, energy is defined as the perceptual measure of intensity and activity of a track, and a song's energy level is also on a scale of 0 to 1 with 1 being the highest. 
+
+The average energy value for the songs in the highest energy quartile out of the entire dataset is about 0.88. Only about 10% of the songs out of the highest quartile for Spotify streams had energy values above this mean value. For songs out of the highest quartile for YouTube music views, only about 12% had energy values over this mean value. I'd be interested in looking further into this question and seeing what the average energy values for these subsets of the data are. I would've guessed that a higher percentage of the most streamed songs and most viewed songs would be over 0.88 due to my personal association of energy with pop music, so this finding goes against that idea.
 
 ```{r}
-# all data average
+# highest quartile average
 spotify_youtube_data %>%
   filter(energy>=0.7980000) %>%
   summarise(
@@ -146,8 +156,11 @@ knitr::include_graphics(rep("images/energy_values_q2.png"))
 
 ### Question 3 
 
-* **Question**: Which key shows up the most in the highest quartile for Spotify streams and highest quartile for YouTube music video views?
-* **Analysis summary**: The key value of 1, which corresponds to C sharp/D flat, appears the most in both the highest quartile for Spotify streams and highest quartile for YouTube music video views.
+* **Question**: Which key shows up the most in the highest quartile for Spotify streams and highest quartile for YouTube music video views? Which key shows up the least?
+
+* **Analysis summary**: Songs were assigned a number corresponding to the key the song was in, which is also known as integer notation. This notation ranges from 0 to 11. 
+
+The key value of 1, which corresponds to C sharp/D flat, appears the most in both the highest quartile for Spotify streams and highest quartile for YouTube music video views. There was a slightly higher percentage of the most streamed songs that fell into this key compared to songs with the most music video views. The other most frequent key values that showed up were C and G. Additionally, an extremely low percentage of the most streamed and most viewed songs were in the key of D sharp/E flat.
 
 ```{r}
 spotify_youtube_data %>%
@@ -164,13 +177,16 @@ spotify_youtube_data %>%
   arrange(desc(total_views_occurrences)) %>%
   mutate(pct_occurrences=total_views_occurrences/5063 * 100)
 
-knitr::include_graphics(rep("images/keys_q3.png"))
+knitr::include_graphics(rep("images/keys_popular_songs_q3.png"))
 ```
 
 ### Question 4
 
-* **Question**: What percentage of artists out of everyone in the dataset have valence values above the average value for the entire dataset? How many artists in the highest quartile of Spotify streams have valence values over the average? How many artists in the highest quartile of YouTube music video views?
-* **Analysis summary**: There's a total of 2079 artists in this dataset. Out of this number, about 52% have valence values above the average valence value in the highest quartile for that specific factor. About 17% of artists above the average stream value in the highest stream quartile have a valence value over the average value. For YouTube music video views, that number is about 18.6%.
+* **Question**: What percentage of artists out of everyone in the dataset have valence values above the average high value for the entire dataset (from Question 1)? How many artists in the highest quartile of Spotify streams have valence values over the average? How many artists in the highest quartile of YouTube music video views?
+
+* **Analysis summary**: There's a total of 2079 artists in this dataset. Out of this number, about 52% have valence values above the average valence value — 0.84 — in the highest quartile for that specific factor. About 17% of artists above the average stream value in the highest stream quartile have a valence value over the average value. For YouTube music video views, that number is about 18.6%. 
+
+Again, it's not surprising that the artists with the most streams and artists with most music video views have a similar percentage over this average valence value, but I'd be interested in seeing what the average valence values for these subsets would be. It's also interesting to note that just over half of all the artists in this dataset have a valence value over 0.84 compared to those with the most streams and views. This also begs the question of if there's a specific range of valence values that the songs with the most streams and songs with the most views fall into.
 
 ```{r}
 spotify_youtube_data %>%
@@ -198,12 +214,17 @@ spotify_youtube_data %>%
 357/2079 * 100
 # pct of top viewed artists
 387/2079 * 100
+
+knitr::include_graphics(rep("images/artists_valence_q4.png"))
 ```
 
 ### Question 5
 
 * **Question**: What is the average danceability value for songs in the highest and lowest quartiles of this data? How many songs with the most Spotify streams had danceability values above the highest quartile average or below the lowest quartile average? How many songs with the most YouTube music video views had danceability values above the highest quartile average or below the lowest quartile average? 
-* **Analysis summary**: For songs in the highest and lowest quartiles of the dataset, the average danceability values respectively are about 0.81 and 0.4. 
+
+* **Analysis summary**: In this dataset, danceability as a metric represents how suitable a song is to dance to based on multiple music factors like tempo, rhythm stability, beat strength and overall regularity. Songs' danceability was on a scale of 0 to 1, with 1 being the highest danceability value. 
+
+For songs in the highest and lowest danceability quartiles of the dataset, the average danceability values respectively are about 0.81 and 0.4. About 29% of the songs with the most streams and about 31% of songs with the most music video views had danceability values over 0.81. In comparison, about 21% of the songs with the most streams and about 19% of songs with the most music video views had danceability values below 0.4. It's interesting to note that songs with the most streams skew slightly less towards being over the high quartile average in comparison to songs with the most music video views. However, something that also could be worth noting is the percentages of most streamed songs and most viewed songs under 0.4, which is a slightly below-average danceability value, is still relatively high. I'd definitely be interested in looking at the range of danceability values across the most popular values to see if there's any particular heavy skew.
 
 ```{r}
 # calculating quartile averages
@@ -248,5 +269,12 @@ spotify_youtube_data %>%
   mutate(
     pct_dance_songs_views=total_low_views_songs/5061*100
   )
+
+knitr::include_graphics(rep("images/popular_songs_danceability_q5.png"))
 ```
 
+## CONCLUSIONS AND FURTHERING THE STORY
+
+These findings mark what could be the beginning of a longer and much more fun, in-depth story about what specific metrics the most popular songs have in common — whether that's valence, energy, danceability or another factor entirely — and if the top songs' metrics differ from what one might think the ideal pop song is. I'd be particularly interested in looking at trends of the most popular songs over time and seeing if any of these common metrics significantly vary. To further strengthen the findings of this data analysis, I would want to collect and analyze these songs at different point of time, possibly at the end of this year, to see if the metrics for the most streamed and viewed songs have changed. I'd also want to look at other platforms, such as Apple Music, to have another service to use to measure the song's popularity in streams/views. If I were to pursue a story looking at the changes in the most popular songs' valence, energy and danceability values, I would seek out a dataset similar to this taken at a different time, such as 5 years ago in 2018 or 10 years ago in 2013, so those datasets' metrics could be compared to this 2023 one.
+
+To finish off the story as it is right now, I'd make sure to reach out to experts on analyzing music — specifically people who could explain how values are applied to represent songs' certain metrics like valence, danceability, etc. I would ask them to explain how the values are assigned, as well as if any of these findings would surprise them when thinkikng about songs that become the most popular. In particular, I'd want to ask for expert opinions on why the most popular songs in specific keys.
